@@ -1,0 +1,18 @@
+package Chapter_1_2.Array_Instantiation;
+
+import Chapter_1_2.Object_Instantiation.Dog;
+
+/**
+ * Created by AlexMan
+ */
+public class DogArrayDemo {
+    public static void main(String[] args) {
+        /* Create an array of two dogs. */
+        Dog[] dogs = new Dog[2];
+        dogs[0] = new Dog(8);
+        dogs[1] = new Dog(20);
+
+        /* Yipping will result, since dogs[0] has weight 8. */
+        dogs[0].makeNoise();
+    }
+}
