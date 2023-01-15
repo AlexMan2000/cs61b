@@ -1,5 +1,3 @@
-package Chapter_2_2;
-
 /**
  * Created by AlexMan
  * An SLList is a list of integers, which hides the terrible truth
@@ -52,6 +50,9 @@ public class SLList {
      * @return
      */
     public int getFirst(){
+        if(size == 0){
+            return -1;
+        }
         return sentinel.next.item;
     }
 
@@ -88,9 +89,25 @@ public class SLList {
     }
 
 
+    /**
+     * Delete the first element in your SLList.
+     */
+    public void deleteFirst(){
+        if(sentinel.next == null){
+            return;
+        }else if(sentinel.next.next == null){
+            sentinel.next = null;
+        }else{
+            sentinel.next = sentinel.next.next;
+        }
+    }
+
+
+
     public int size() {
         return size;
     }
+
 
     public static void main(String[] args) {
         /* Create a list of one integer, namely 10*/

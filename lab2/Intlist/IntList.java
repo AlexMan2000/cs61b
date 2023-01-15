@@ -116,47 +116,47 @@ public class IntList {
      * Returns a list consisting of the elements of A followed by the
      * * elements of B.  May NOT modify items of A.  Use 'new'.
      */
-//    public static IntList catenate(IntList A, IntList B) {
-//        //TODO:  fill in method
-//        if(A == null){
-//            return B;
-//        }else{
-//            IntList start = new IntList(A.first, null);
-//            IntList prev = start;
-//            IntList A1 = A.rest;
-//            IntList B1 = B;
-//            while(A1!=null){
-//                prev.rest = new IntList(A1.first, null);
-//                prev = prev.rest;
-//                A1 = A1.rest;
-//            }
-//            while(B1!=null){
-//                prev.rest = new IntList(B1.first, null);
-//                prev = prev.rest;
-//                B1 = B1.rest;
-//            }
-//            return start;
-//        }
-//    }
+    public static IntList catenate(IntList A, IntList B) {
+        //TODO:  fill in method
+        if(A == null){
+            return B;
+        }else{
+            IntList start = new IntList(A.first, null);
+            IntList prev = start;
+            IntList A1 = A.rest;
+            IntList B1 = B;
+            while(A1!=null){
+                prev.rest = new IntList(A1.first, null);
+                prev = prev.rest;
+                A1 = A1.rest;
+            }
+            while(B1!=null){
+                prev.rest = new IntList(B1.first, null);
+                prev = prev.rest;
+                B1 = B1.rest;
+            }
+            return start;
+        }
+    }
 
     /**
      * Returns a list consisting of the elements of A followed by the
      * * elements of B.  May NOT modify items of A.  Use 'new'. Recursive
      */
-    public static IntList catenate(IntList A, IntList B) {
-        //TODO:  fill in method
-        if(A == null){
-            if(B == null){
-                return null;
-            } else if(B.rest == null){
-                return new IntList(B.first, null);
-            }else{
-                return new IntList(B.first, catenate(null, B.rest));
-            }
-        }else{
-            return new IntList(A.first, catenate(A.rest, B));
-        }
-    }
+//    public static IntList catenate(IntList A, IntList B) {
+//        //TODO:  fill in method
+//        if(A == null){
+//            if(B == null){
+//                return null;
+//            } else if(B.rest == null){
+//                return new IntList(B.first, null);
+//            }else{
+//                return new IntList(B.first, catenate(null, B.rest));
+//            }
+//        }else{
+//            return new IntList(A.first, catenate(A.rest, B));
+//        }
+//    }
 
 
 
