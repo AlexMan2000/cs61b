@@ -24,4 +24,14 @@ public class TestSLList {
         assertEquals(exp.getFirst(), L.getFirst());
     }
 
+    @Test
+    public void testConstructor(){
+        int[] temp = {30,20,10};
+        SLList L = new SLList(temp);
+        SLList exp = new SLList(10);
+        exp.addFirst(20);
+        exp.addFirst(30);
+        assertEquals(exp.getFirst(), L.getFirst());
+    }
+
 }

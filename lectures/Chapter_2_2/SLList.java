@@ -17,6 +17,7 @@ public class SLList {
         }
     }
 
+
     /**
      *
      */
@@ -33,6 +34,17 @@ public class SLList {
         // Link the first element
         sentinel.next =  new IntNode(x, null);
         size = 1;
+    }
+
+
+    public SLList(int[] array){
+        sentinel = new IntNode(-5, null);
+        IntNode p = sentinel;
+        for(int x: array){
+            p.next = new IntNode(x, null);
+            p = p.next;
+            size += 1;
+        }
     }
 
     /**
