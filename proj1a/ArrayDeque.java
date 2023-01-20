@@ -1,17 +1,13 @@
-import edu.princeton.cs.algs4.StdRandom;
-
-import java.util.Arrays;
-
 /**
  * Created by AlexMan
  */
 public class ArrayDeque<T> implements Deque<T> {
 
-    public static int MAXCAPACITY = 8;
-    public static double LOADING_FACTOR = 0.25;
-    public T[] items;
-    public int size;
-    public int front = 0; // The pointer to the front of the deque
+    private static int MAXCAPACITY = 8;
+    private static double LOADING_FACTOR = 0.25;
+    private T[] items;
+    private int size;
+    private int front = 0; // The pointer to the front of the deque
 
 
     // Constructor
@@ -25,7 +21,7 @@ public class ArrayDeque<T> implements Deque<T> {
         if (size == MAXCAPACITY) {
             resize(MAXCAPACITY * 2);
         }
-        if (isEmpty()){
+        if (isEmpty()) {
             items[front] = item;
         } else {
             // Loop back to the end
@@ -108,7 +104,7 @@ public class ArrayDeque<T> implements Deque<T> {
     // Resize the arraydeque
     private void resize(int newSize){
         T[] newItems = (T[]) new Object[newSize];
-        for(int i = 0; i< size; i++){
+        for (int i = 0; i < size; i++) {
             int oldIndex = (front + i) % MAXCAPACITY;
             int newIndex = (i) % newSize;
             newItems[newIndex] = items[oldIndex];
@@ -126,32 +122,12 @@ public class ArrayDeque<T> implements Deque<T> {
         }
         StringBuilder res = new StringBuilder();
         res.append("[");
-        for(int i = 0; i < size - 1;i++){
+        for (int i = 0; i < size - 1; i++) {
             res.append(items[(front + i) % MAXCAPACITY]);
             res.append(", ");
         }
         res.append(items[(front + size - 1) % MAXCAPACITY]);
         res.append("]");
         return res.toString();
-    }
-
-
-    public static void randomizedTest(){
-        ArrayDeque<Integer> aDeque = new ArrayDeque<>();
-        int N = 5000;
-        int operationNumber = StdRandom.uniform(0,4);
-        for(int i = 0; i < N; i++){
-            int randomNumber = StdRandom.uniform(1,11);
-            if(operationNumber == 0){
-                aDeque.addFirst(randomNumber);
-            } else if (operationNumber == 1){
-                aDeque.removeFirst();
-            } else if (operationNumber == 2){
-                aDeque.addLast(randomNumber);
-            } else {
-                aDeque.removeLast();
-            }
-        }
-        System.out.println(aDeque);
     }
 }
