@@ -8,14 +8,14 @@ public class LinkedListDeque<T> {
 
 
     // Nested Class Definition with reference to T, so no static keyword here
-    public class DequeNode {
+    private class DequeNode {
         T item;
         DequeNode next;
         DequeNode prev;
 
 
         // Constructor
-        public DequeNode(T i, DequeNode n, DequeNode p) {
+        DequeNode(T i, DequeNode n, DequeNode p) {
             this.item = i;
             this.next = n;
             this.prev = p;
@@ -63,34 +63,32 @@ public class LinkedListDeque<T> {
     }
 
     public T removeFirst() {
-        size -= 1;
         if (size == 0) {
             return null;
         } else {
+            size -= 1;
             DequeNode nextNext = sentinel.next.next;
-            DequeNode next = sentinel.next;
-            // Garbage Collection
-            next.prev = null;
-            next.next = null;
+            T res = sentinel.next.item;
+            // Garbage Collection, 要让指向这个节点的节点放弃对该节点的引用
             // Delete the node
             sentinel.next = nextNext;
-            return next.item;
+            nextNext.prev = sentinel;
+            return res;
         }
     }
 
     public T removeLast() {
-        size -= 1;
         if (size == 0) {
             return null;
         } else {
+            size -= 1;
             DequeNode prevPrev = sentinel.prev.prev;
-            DequeNode prev = sentinel.prev;
+            T res = sentinel.prev.item;
             // Garbage Collection
-            prev.prev = null;
-            prev.next = null;
             // Delete the node
             sentinel.prev = prevPrev;
-            return prev.item;
+            prevPrev.next = sentinel;
+            return res;
         }
     }
 

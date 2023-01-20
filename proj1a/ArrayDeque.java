@@ -5,6 +5,7 @@ public class ArrayDeque<T> {
 
     private static int MAXCAPACITY = 8;
     private static double LOADING_FACTOR = 0.25;
+    private static double LOADING_FACTOR_SMALL = 0.01;
     private T[] items;
     private int size;
     private int front = 0; // The pointer to the front of the deque
@@ -55,8 +56,12 @@ public class ArrayDeque<T> {
     }
 
     public T removeFirst() {
-        if (size < MAXCAPACITY * LOADING_FACTOR) {
-            if (MAXCAPACITY > 8) {
+        if (MAXCAPACITY >= 16) {
+            if (size < Math.round(MAXCAPACITY * LOADING_FACTOR)) {
+                resize(MAXCAPACITY / 2);
+            }
+        }  else {
+            if (size < Math.round(MAXCAPACITY * LOADING_FACTOR_SMALL)) {
                 resize(MAXCAPACITY / 2);
             }
         }
@@ -72,8 +77,12 @@ public class ArrayDeque<T> {
     }
 
     public T removeLast() {
-        if (size < Math.round(MAXCAPACITY * LOADING_FACTOR)) {
-            if (MAXCAPACITY > 8) {
+        if (MAXCAPACITY >= 16) {
+            if (size < Math.round(MAXCAPACITY * LOADING_FACTOR)) {
+                resize(MAXCAPACITY / 2);
+            }
+        }  else {
+            if (size < Math.round(MAXCAPACITY * LOADING_FACTOR_SMALL)) {
                 resize(MAXCAPACITY / 2);
             }
         }
