@@ -32,13 +32,29 @@ public class LinkedListDeque<T> {
     }
 
     public void addFirst(T item) {
-        sentinel.next = new DequeNode(item, sentinel.next, sentinel);
+        if (isEmpty()) {
+            DequeNode newNode = new DequeNode(item, sentinel.next, sentinel);
+            sentinel.next = newNode;
+            sentinel.prev = newNode;
+        } else {
+            DequeNode nextNode = sentinel.next;
+            sentinel.next = new DequeNode(item, nextNode, sentinel);
+            nextNode.prev = sentinel.next;
+        }
         size += 1;
     }
 
 
     public void addLast(T item) {
-        sentinel.next = new DequeNode(item, sentinel, sentinel.prev);
+        if (isEmpty()) {
+            DequeNode newNode = new DequeNode(item, sentinel, sentinel.prev);
+            sentinel.next = newNode;
+            sentinel.prev = newNode;
+        } else {
+            DequeNode lastNode = sentinel.prev;
+            sentinel.prev = new DequeNode(item, sentinel, lastNode);
+            lastNode.next = sentinel.prev;
+        }
         size += 1;
     }
 
@@ -63,7 +79,7 @@ public class LinkedListDeque<T> {
     }
 
     public T removeFirst() {
-        if (size == 0) {
+        if (isEmpty()) {
             return null;
         } else {
             size -= 1;
@@ -78,7 +94,7 @@ public class LinkedListDeque<T> {
     }
 
     public T removeLast() {
-        if (size == 0) {
+        if (isEmpty()) {
             return null;
         } else {
             size -= 1;
@@ -118,4 +134,23 @@ public class LinkedListDeque<T> {
         }
         return getRecursiveHelper(index - 1, node.next);
     }
+
+//    @Override
+//    public String toString() {
+//        if (size == 0) {
+//            return "[]";
+//        } else {
+//            StringBuilder res = new StringBuilder();
+//            res.append("[");
+//            DequeNode first = sentinel.next;
+//            while (first.next!= sentinel){
+//                res.append(first.item);
+//                first = first.next;
+//                res.append(", ");
+//            }
+//            res.append(first.item);
+//            res.append("]");
+//            return res.toString();
+//        }
+//    }
 }
