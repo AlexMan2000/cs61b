@@ -23,7 +23,7 @@ public class ArrayDeque<T> {
             items[front] = item;
         } else {
             // Loop back to the end
-            int newFront = (front + MAXCAPACITY - 1) % MAXCAPACITY;
+            int newFront = (front - 1) % MAXCAPACITY;
             items[newFront] = item;
             front = newFront;
         }
@@ -57,7 +57,7 @@ public class ArrayDeque<T> {
         if (isEmpty()) {
             return null;
         }
-        int newFront = (front + MAXCAPACITY + 1) % MAXCAPACITY;
+        int newFront = (front + 1) % MAXCAPACITY;
         T res = items[front];
         // Garbage Collection
         items[front] = null;
@@ -91,13 +91,14 @@ public class ArrayDeque<T> {
         T[] newItems = (T[]) new Object[newSize];
         for (int i = 0; i < size; i++) {
             int oldIndex = (front + i) % MAXCAPACITY;
-            int newIndex = (i) % newSize;
+            int newIndex = (i) % newSize;  // New front at zero index
             newItems[newIndex] = items[oldIndex];
         }
         MAXCAPACITY = newSize;
-        items = newItems;
+        this.items = null;
+        this.items = newItems;
         // Set the new front
-        front = 0;
+        this.front = 0;
     }
 
     // Resize the arraydeque
@@ -112,7 +113,7 @@ public class ArrayDeque<T> {
             if (size < Math.round(MAXCAPACITY * 0.25)) {
                 resize(MAXCAPACITY / 2);
             }
-        } else if (MAXCAPACITY >= 8 && MAXCAPACITY <= 16) {
+        } else if (MAXCAPACITY >= 8) {
             if (size < Math.round(MAXCAPACITY * 0.125)) {
                 resize(MAXCAPACITY / 2);
             }
