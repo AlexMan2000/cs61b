@@ -109,26 +109,24 @@ public class ArrayDeque<T> {
 
     // Downsize the arraydeque
     private void decResize() {
-        if (MAXCAPACITY >= 16) {
-            if (size < Math.round(MAXCAPACITY * LOADING_FACTOR)) {
-                resize(MAXCAPACITY / 2);
-            }
+        if (MAXCAPACITY >= 16 && size < Math.round(MAXCAPACITY * LOADING_FACTOR)) {
+            resize(MAXCAPACITY / 2);
         }
     }
 
-    @Override
-    public String toString() {
-        if (isEmpty()) {
-            return "[]";
-        }
-        StringBuilder res = new StringBuilder();
-        res.append("[");
-        for (int i = 0; i < size - 1; i++) {
-            res.append(items[(front + i) % MAXCAPACITY]);
-            res.append(", ");
-        }
-        res.append(items[(front + size - 1) % MAXCAPACITY]);
-        res.append("]");
-        return res.toString();
-    }
+//    @Override
+//    public String toString() {
+//        if (isEmpty()) {
+//            return "[]";
+//        }
+//        StringBuilder res = new StringBuilder();
+//        res.append("[");
+//        for (int i = 0; i < size - 1; i++) {
+//            res.append(items[(front + i) % MAXCAPACITY]);
+//            res.append(", ");
+//        }
+//        res.append(items[(front + size - 1) % MAXCAPACITY]);
+//        res.append("]");
+//        return res.toString();
+//    }
 }
