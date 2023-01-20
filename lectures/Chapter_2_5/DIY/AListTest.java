@@ -3,7 +3,7 @@ package DIY;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-/** Tests the DIY.AList class.
+/** Tests the DIY.lectures.AList class.
  *  @author Josh Hug
  */
 

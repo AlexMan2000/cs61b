@@ -1,6 +1,6 @@
 /**
  * Created by AlexMan
- * An SLList is a list of integers, which hides the terrible truth
+ * An lectures.SLList is a list of integers, which hides the terrible truth
  * of the nakedness within.
  */
 public class SLList {
@@ -48,7 +48,7 @@ public class SLList {
     }
 
     /**
-     * Append a new node at the front of the SLList
+     * Append a new node at the front of the lectures.SLList
      * @param i
      */
     public void addFirst(int i){
@@ -70,7 +70,7 @@ public class SLList {
 
 
     /**
-     * Return the string representation of the SLList
+     * Return the string representation of the lectures.SLList
      * @return
      */
     public String printList(){
@@ -88,7 +88,7 @@ public class SLList {
     }
 
     /**
-     * Append an item at the end of the SLList, with sentinel, no modifications!
+     * Append an item at the end of the lectures.SLList, with sentinel, no modifications!
      * @param i
      */
     public void addLast(int i){
@@ -102,7 +102,7 @@ public class SLList {
 
 
     /**
-     * Delete the first element in your SLList.
+     * Delete the first element in your lectures.SLList.
      */
     public void deleteFirst(){
         if(sentinel.next == null){

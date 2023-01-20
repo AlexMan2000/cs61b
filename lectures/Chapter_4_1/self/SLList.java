@@ -1,6 +1,3 @@
-/* Represent a list of stuff, where all the "list" work is delegated
- * to a naked recursive data structure. */
-
 public class SLList<Blorp> implements List61B<Blorp> {
 	public class Node {
 		public Blorp item;     /* Equivalent of first */
@@ -124,7 +121,7 @@ public class SLList<Blorp> implements List61B<Blorp> {
 	}	
 
 
-	/** TODO: Add a print method that overrides List61B's inefficient print method. */
+	/** TODO: Add a print method that overrides lectures.List61B's inefficient print method. */
 	@Override
 	public void print() {
 		for (Node p = sentinel.next; p != null; p = p.next) {
