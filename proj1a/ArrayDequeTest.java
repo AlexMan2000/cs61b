@@ -1,8 +1,6 @@
 import edu.princeton.cs.algs4.StdRandom;
 import org.junit.Test;
 
-import java.util.Arrays;
-
 import static org.junit.Assert.*;
 
 
@@ -12,9 +10,9 @@ import static org.junit.Assert.*;
 public class ArrayDequeTest {
 
     @Test
-    public void testAddFirst(){
+    public void testAddFirst() {
         ArrayDeque<Integer> aDeque = new ArrayDeque<>();
-        for(int i=0; i< 100; i++){
+        for (int i = 0; i < 100; i++) {
             aDeque.addFirst(i);
         }
         System.out.println(aDeque);
@@ -22,9 +20,9 @@ public class ArrayDequeTest {
 
 
     @Test
-    public void testAddLast(){
+    public void testAddLast() {
         ArrayDeque<Integer> aDeque = new ArrayDeque<>();
-        for(int i=0; i< 100; i++){
+        for (int i = 0; i < 100; i++) {
             aDeque.addLast(i);
         }
         System.out.println(aDeque);
@@ -32,13 +30,13 @@ public class ArrayDequeTest {
 
 
     @Test
-    public void testRemoveFirst(){
+    public void testRemoveFirst() {
         ArrayDeque<Integer> aDeque = new ArrayDeque<>();
-        for(int i=0; i< 100; i++){
+        for (int i = 0; i < 100; i++) {
             aDeque.addLast(i);
         }
         System.out.println(aDeque);
-        for(int i=0; i < 99; i++){
+        for (int i = 0; i < 99; i++) {
             aDeque.removeFirst();
         }
         System.out.println(aDeque.get(0));
@@ -47,14 +45,14 @@ public class ArrayDequeTest {
     }
 
     @Test
-    public void testRemoveLast(){
+    public void testRemoveLast() {
         System.out.println(Math.round(3.2));
         ArrayDeque<Integer> aDeque = new ArrayDeque<>();
-        for(int i=0; i< 100; i++){
+        for (int i = 0; i < 100; i++) {
             aDeque.addLast(i);
         }
         System.out.println(aDeque);
-        for(int i=0; i < 99; i++){
+        for (int i = 0; i < 99; i++) {
             aDeque.removeLast();
         }
         System.out.println(aDeque.get(0));
@@ -63,17 +61,17 @@ public class ArrayDequeTest {
     }
 
     @Test
-    public void randomizedTest(){
+    public void randomizedTest() {
         ArrayDeque<Integer> aDeque = new ArrayDeque<>();
         int N = 5000;
-        int operationNumber = StdRandom.uniform(0,4);
-        for(int i = 0; i < N; i++){
-            int randomNumber = StdRandom.uniform(1,11);
-            if(operationNumber == 0){
+        int operationNumber = StdRandom.uniform(0, 4);
+        for (int i = 0; i < N; i++) {
+            int randomNumber = StdRandom.uniform(1, 11);
+            if (operationNumber == 0) {
                 aDeque.addFirst(randomNumber);
-            } else if (operationNumber == 1){
+            } else if (operationNumber == 1) {
                 aDeque.removeFirst();
-            } else if (operationNumber == 2){
+            } else if (operationNumber == 2) {
                 aDeque.addLast(randomNumber);
             } else {
                 aDeque.removeLast();

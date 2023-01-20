@@ -1,7 +1,7 @@
 /**
  * Created by AlexMan
  */
-public class LinkedListDeque<T> implements Deque<T> {
+public class LinkedListDeque<T> {
 
     private DequeNode sentinel;
     private int size;
@@ -31,30 +31,25 @@ public class LinkedListDeque<T> implements Deque<T> {
         size = 0;
     }
 
-    @Override
     public void addFirst(T item) {
         sentinel.next = new DequeNode(item, sentinel.next, sentinel);
         size += 1;
     }
 
 
-    @Override
     public void addLast(T item) {
         sentinel.next = new DequeNode(item, sentinel, sentinel.prev);
         size += 1;
     }
 
-    @Override
     public boolean isEmpty() {
         return size == 0;
     }
 
-    @Override
     public int size() {
         return size;
     }
 
-    @Override
     public void printDeque() {
         if (size > 0) {
             DequeNode first = sentinel.next;
@@ -67,7 +62,6 @@ public class LinkedListDeque<T> implements Deque<T> {
         }
     }
 
-    @Override
     public T removeFirst() {
         size -= 1;
         if (size == 0) {
@@ -84,7 +78,6 @@ public class LinkedListDeque<T> implements Deque<T> {
         }
     }
 
-    @Override
     public T removeLast() {
         size -= 1;
         if (size == 0) {
@@ -101,7 +94,6 @@ public class LinkedListDeque<T> implements Deque<T> {
         }
     }
 
-    @Override
     public T get(int index) {
         if (size == 0 || index >= size) {
             return null;
