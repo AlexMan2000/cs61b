@@ -11,7 +11,7 @@ public class ArrayDeque<T> implements Deque<T> {
 
 
     // Constructor
-    public ArrayDeque(){
+    public ArrayDeque() {
         items = (T[]) new Object[MAXCAPACITY];
         size = 0;
     }
@@ -53,16 +53,16 @@ public class ArrayDeque<T> implements Deque<T> {
 
     @Override
     public void printDeque() {
-        for(int i= 0; i<size-1;i++){
+        for (int i = 0; i < size - 1; i++) {
             System.out.print(items[i] + " ");
         }
-        System.out.println(items[size-1]);
+        System.out.println(items[size - 1]);
     }
 
     @Override
     public T removeFirst() {
         if (size < MAXCAPACITY * LOADING_FACTOR) {
-            if (MAXCAPACITY > 8){
+            if (MAXCAPACITY > 8) {
                 resize(MAXCAPACITY / 2);
             }
         }
@@ -80,11 +80,11 @@ public class ArrayDeque<T> implements Deque<T> {
     @Override
     public T removeLast() {
         if (size < Math.round(MAXCAPACITY * LOADING_FACTOR)) {
-            if (MAXCAPACITY > 8){
+            if (MAXCAPACITY > 8) {
                 resize(MAXCAPACITY / 2);
             }
         }
-        if( isEmpty()) {
+        if (isEmpty()) {
             return null;
         }
         T res = items[(front + size - 1) % MAXCAPACITY];
@@ -95,14 +95,14 @@ public class ArrayDeque<T> implements Deque<T> {
 
     @Override
     public T get(int index) {
-        if (index >= size || isEmpty()){
+        if (index >= size || isEmpty()) {
             return null;
         }
         return items[(front + index) % MAXCAPACITY];
     }
 
     // Resize the arraydeque
-    private void resize(int newSize){
+    private void resize(int newSize) {
         T[] newItems = (T[]) new Object[newSize];
         for (int i = 0; i < size; i++) {
             int oldIndex = (front + i) % MAXCAPACITY;
@@ -116,9 +116,9 @@ public class ArrayDeque<T> implements Deque<T> {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         if (isEmpty()) {
-           return "[]";
+            return "[]";
         }
         StringBuilder res = new StringBuilder();
         res.append("[");
