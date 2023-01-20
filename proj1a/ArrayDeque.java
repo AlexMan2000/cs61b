@@ -5,7 +5,6 @@ public class ArrayDeque<T> {
 
     private static int MAXCAPACITY = 8;
     private static double LOADING_FACTOR = 0.25;
-    private static double LOADING_FACTOR_SMALL = 0.01;
     private T[] items;
     private int size;
     private int front = 0; // The pointer to the front of the deque
@@ -19,7 +18,7 @@ public class ArrayDeque<T> {
 
     public void addFirst(T item) {
         if (size == MAXCAPACITY) {
-            resize(MAXCAPACITY * 2);
+            incResize();
         }
         if (isEmpty()) {
             items[front] = item;
@@ -34,7 +33,7 @@ public class ArrayDeque<T> {
 
     public void addLast(T item) {
         if (size == MAXCAPACITY) {
-            resize(MAXCAPACITY * 2);
+            incResize();
         }
         items[(front + size) % MAXCAPACITY] = item;
         size += 1;
@@ -56,42 +55,28 @@ public class ArrayDeque<T> {
     }
 
     public T removeFirst() {
-        if (MAXCAPACITY >= 16) {
-            if (size < Math.round(MAXCAPACITY * LOADING_FACTOR)) {
-                resize(MAXCAPACITY / 2);
-            }
-        }  else {
-            if (size < Math.round(MAXCAPACITY * LOADING_FACTOR_SMALL)) {
-                resize(MAXCAPACITY / 2);
-            }
-        }
         if (isEmpty()) {
             return null;
         }
         int newFront = (front + MAXCAPACITY + 1) % MAXCAPACITY;
         T res = items[front];
+        // Garbage Collection
         items[front] = null;
         front = newFront;
         size -= 1;
+        decResize();
         return res;
     }
 
     public T removeLast() {
-        if (MAXCAPACITY >= 16) {
-            if (size < Math.round(MAXCAPACITY * LOADING_FACTOR)) {
-                resize(MAXCAPACITY / 2);
-            }
-        }  else {
-            if (size < Math.round(MAXCAPACITY * LOADING_FACTOR_SMALL)) {
-                resize(MAXCAPACITY / 2);
-            }
-        }
         if (isEmpty()) {
             return null;
         }
         T res = items[(front + size - 1) % MAXCAPACITY];
+        // Garbage Collection
         items[(front + size - 1) % MAXCAPACITY] = null;
         size -= 1;
+        decResize();
         return res;
     }
 
@@ -102,7 +87,7 @@ public class ArrayDeque<T> {
         return items[(front + index) % MAXCAPACITY];
     }
 
-    // Resize the arraydeque
+
     private void resize(int newSize) {
         T[] newItems = (T[]) new Object[newSize];
         for (int i = 0; i < size; i++) {
@@ -116,19 +101,34 @@ public class ArrayDeque<T> {
         front = 0;
     }
 
-//    @Override
-//    private String toString() {
-//        if (isEmpty()) {
-//            return "[]";
-//        }
-//        StringBuilder res = new StringBuilder();
-//        res.append("[");
-//        for (int i = 0; i < size - 1; i++) {
-//            res.append(items[(front + i) % MAXCAPACITY]);
-//            res.append(", ");
-//        }
-//        res.append(items[(front + size - 1) % MAXCAPACITY]);
-//        res.append("]");
-//        return res.toString();
-//    }
+    // Resize the arraydeque
+    private void incResize() {
+        int newSize = MAXCAPACITY * 2;
+        resize(newSize);
+    }
+
+    // Downsize the arraydeque
+    private void decResize() {
+        if (MAXCAPACITY >= 16) {
+            if (size < Math.round(MAXCAPACITY * LOADING_FACTOR)) {
+                resize(MAXCAPACITY / 2);
+            }
+        }
+    }
+
+    @Override
+    public String toString() {
+        if (isEmpty()) {
+            return "[]";
+        }
+        StringBuilder res = new StringBuilder();
+        res.append("[");
+        for (int i = 0; i < size - 1; i++) {
+            res.append(items[(front + i) % MAXCAPACITY]);
+            res.append(", ");
+        }
+        res.append(items[(front + size - 1) % MAXCAPACITY]);
+        res.append("]");
+        return res.toString();
+    }
 }
