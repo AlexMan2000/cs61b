@@ -22,8 +22,8 @@ public class ArrayDeque<T> {
         if (isEmpty()) {
             items[front] = item;
         } else {
-            // Loop back to the end
-            int newFront = (front - 1) % MAXCAPACITY;
+            // Loop back to the end, cannot miss the MAXCAPACITY
+            int newFront = (front + MAXCAPACITY - 1) % MAXCAPACITY;
             items[newFront] = item;
             front = newFront;
         }
@@ -57,7 +57,7 @@ public class ArrayDeque<T> {
         if (isEmpty()) {
             return null;
         }
-        int newFront = (front + 1) % MAXCAPACITY;
+        int newFront = (front + MAXCAPACITY + 1) % MAXCAPACITY;
         T res = items[front];
         // Garbage Collection
         items[front] = null;
