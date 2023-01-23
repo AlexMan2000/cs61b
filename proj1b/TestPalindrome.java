@@ -26,12 +26,18 @@ public class TestPalindrome {
         String palin4 = "";
         String palin5 = "&s&";
         String palin6 = "$2s2$";
+        String palin7 = "1";
+        String palin8 = "haha";
+        String palin9 = "Asdsa";
         assertTrue(p.isPalindrome(palin1));
         assertTrue(p.isPalindrome(palin2));
         assertFalse(p.isPalindrome(palin3));
         assertTrue(p.isPalindrome(palin4));
         assertTrue(p.isPalindrome(palin5));
         assertTrue(p.isPalindrome(palin6));
+        assertTrue(p.isPalindrome(palin7));
+        assertFalse(p.isPalindrome(palin8));
+        assertFalse(p.isPalindrome(palin9));
     }
 
     @Test
@@ -44,9 +50,11 @@ public class TestPalindrome {
         String palin22 = "Rtous"; // Case sensitive
         String palin3 = "a"; // length 1
         String palin31 = "$";
+        String palin32 = "2";
         String palin4 = "";  // length 0
         String palin5 = "abs";  // false
         String palin6 = "&%";
+        String palin61 = "20";
         String palin7 = "&s^";
         assertTrue(p.isPalindrome(palin1, obo));
         assertTrue(p.isPalindrome(palin2, obo));
@@ -54,15 +62,19 @@ public class TestPalindrome {
         assertFalse(p.isPalindrome(palin22, obo));
         assertTrue(p.isPalindrome(palin3, obo));
         assertTrue(p.isPalindrome(palin31, obo));
+        assertTrue(p.isPalindrome(palin32, obo));
         assertTrue(p.isPalindrome(palin4, obo));
         assertFalse(p.isPalindrome(palin5, obo));
         assertTrue(p.isPalindrome(palin6, obo));
+        assertFalse(p.isPalindrome(palin61, obo));
         assertFalse(p.isPalindrome(palin7, obo));
+        assertFalse(palindrome.isPalindrome("fuckyou", obo));
+        assertFalse(palindrome.isPalindrome("sonofbitch", obo));
+        assertFalse(palindrome.isPalindrome("youfuckingidiot", obo));
+        assertTrue(palindrome.isPalindrome("flake", obo));
+        assertTrue(palindrome.isPalindrome("a", obo));
+        assertFalse(palindrome.isPalindrome("ababssba", obo));
+        assertTrue(palindrome.isPalindrome("", obo));
     }
 
-    @Test
-    public void testPalindromeOffByN() {
-
-
-    }
 }

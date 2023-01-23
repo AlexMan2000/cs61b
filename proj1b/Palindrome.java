@@ -43,7 +43,7 @@ public class Palindrome {
      * @param word
      * @return
      */
-    public boolean isPalindromeRecursive(String word) {
+    private boolean isPalindromeRecursive(String word) {
         return isPalindromeRecursiveHelper(word, 0, word.length() - 1);
     }
 
