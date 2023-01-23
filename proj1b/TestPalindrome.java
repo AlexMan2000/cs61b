@@ -24,13 +24,45 @@ public class TestPalindrome {
         String palin2 = "a";
         String palin3 = "Aba";
         String palin4 = "";
-        boolean res1 = p.isPalindromeRecursive(palin1);
-        boolean res2 = p.isPalindromeRecursive(palin2);
-        boolean res3 = p.isPalindromeRecursive(palin3);
-        boolean res4 = p.isPalindromeRecursive(palin4);
-        assertEquals(res1, true);
-        assertEquals(res2, true);
-        assertEquals(res3, false);
-        assertEquals(res4, true);
+        String palin5 = "&s&";
+        String palin6 = "$2s2$";
+        assertTrue(p.isPalindrome(palin1));
+        assertTrue(p.isPalindrome(palin2));
+        assertFalse(p.isPalindrome(palin3));
+        assertTrue(p.isPalindrome(palin4));
+        assertTrue(p.isPalindrome(palin5));
+        assertTrue(p.isPalindrome(palin6));
+    }
+
+    @Test
+    public void testPalindromeByOne() {
+        Palindrome p = new Palindrome();
+        CharacterComparator obo = new OffByOne();
+        String palin1 = "unhot";  // true cases
+        String palin2 = "stour";
+        String palin21 = "rtous"; // Bidirectional
+        String palin22 = "Rtous"; // Case sensitive
+        String palin3 = "a"; // length 1
+        String palin31 = "$";
+        String palin4 = "";  // length 0
+        String palin5 = "abs";  // false
+        String palin6 = "&%";
+        String palin7 = "&s^";
+        assertTrue(p.isPalindrome(palin1, obo));
+        assertTrue(p.isPalindrome(palin2, obo));
+        assertTrue(p.isPalindrome(palin21, obo));
+        assertFalse(p.isPalindrome(palin22, obo));
+        assertTrue(p.isPalindrome(palin3, obo));
+        assertTrue(p.isPalindrome(palin31, obo));
+        assertTrue(p.isPalindrome(palin4, obo));
+        assertFalse(p.isPalindrome(palin5, obo));
+        assertTrue(p.isPalindrome(palin6, obo));
+        assertFalse(p.isPalindrome(palin7, obo));
+    }
+
+    @Test
+    public void testPalindromeOffByN() {
+
+
     }
 }
