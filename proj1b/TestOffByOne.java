@@ -19,4 +19,21 @@ public class TestOffByOne {
         assertEquals(false, obo.equalChars('a', 'e'));
     }
 
+    @Test
+    public void testOffByOne() {
+        char t1 = 'a';
+        char t2 = 'b';
+        char t3 = 'a';
+        char t4 = '&';
+        char t5 = '%';
+        char t6 = 'B';
+        char t7 = '3';
+        char t8 = '4';
+        assertFalse(offByOne.equalChars(t1, t3));
+        assertTrue(offByOne.equalChars(t1, t2));
+        assertTrue(offByOne.equalChars(t4, t5));
+        assertFalse(offByOne.equalChars(t1, t6));
+        assertTrue(offByOne.equalChars(t7, t8));
+    }
+
 }
