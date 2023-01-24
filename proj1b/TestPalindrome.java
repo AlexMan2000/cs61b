@@ -38,6 +38,13 @@ public class TestPalindrome {
         assertTrue(p.isPalindrome(palin7));
         assertFalse(p.isPalindrome(palin8));
         assertFalse(p.isPalindrome(palin9));
+        assertFalse(palindrome.isPalindrome("fuckyou"));
+        assertFalse(palindrome.isPalindrome("sonofbitch"));
+        assertFalse(palindrome.isPalindrome("youfuckingidiot"));
+        assertTrue(palindrome.isPalindrome("abcdcba"));
+        assertTrue(palindrome.isPalindrome("a"));
+        assertFalse(palindrome.isPalindrome("ababssba"));
+        assertTrue(palindrome.isPalindrome(""));
     }
 
     @Test
