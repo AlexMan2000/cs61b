@@ -61,19 +61,19 @@ public class GuitarString {
         return buffer.peek();
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < buffer.capacity(); i++) {
-            double temp = buffer.dequeue();
-            sb.append(temp);
-            sb.append(" ");
-            buffer.enqueue(temp);
-        }
-        return sb.toString();
-    }
+//    @Override
+//    public String toString() {
+//        StringBuilder sb = new StringBuilder();
+//        for (int i = 0; i < buffer.capacity(); i++) {
+//            double temp = buffer.dequeue();
+//            sb.append(temp);
+//            sb.append(" ");
+//            buffer.enqueue(temp);
+//        }
+//        return sb.toString();
+//    }
 
-    public void printBuffer() {
-        System.out.println(this);
-    }
+//    public void printBuffer() {
+//        System.out.println(this);
+//    }
 }
