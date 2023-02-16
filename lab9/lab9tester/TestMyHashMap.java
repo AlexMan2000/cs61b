@@ -5,6 +5,11 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import lab9.MyHashMap;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Random;
+import java.util.Set;
+
 /**
  * Tests by Brendan Hu, Spring 2015, revised for 2018 by Josh Hug
  */
@@ -126,6 +131,75 @@ public class TestMyHashMap {
         assertEquals(345, studentIDs.get("evil alan").intValue());
         assertEquals(studentIDs.get("evil alan"), studentIDs.get("alan"));
     }
+
+    @Test
+    public void testResize() {
+        MyHashMap<Integer, Integer> dictionary = new MyHashMap<>();
+        assertEquals(0, dictionary.size());
+        for (int i = 0; i < 11; i++) {
+            Integer rint = (new Random()).nextInt();
+            dictionary.put(rint, rint);
+        }
+        Integer rint = (new Random()).nextInt();
+        assertEquals(16, dictionary.maxCapacity());
+        dictionary.put(rint, rint);
+        assertEquals(32, dictionary.maxCapacity());
+    }
+
+
+    @Test
+    public void testKeySet() {
+        MyHashMap<String, Integer> dictionary = new MyHashMap<>();
+        dictionary.put("sarah", 12345);
+        dictionary.put("alan", 345);
+        Set<String> expected = new HashSet<>();
+        expected.add("sarah");
+        expected.add("alan");
+        assertEquals(dictionary.keySet(), expected);
+    }
+
+    @Test
+    public void testRemove() {
+        // putting key in multiple times does not affect behavior
+        MyHashMap<String, Integer> studentIDs = new MyHashMap<>();
+        studentIDs.put("sarah", 12345);
+        assertEquals(1, studentIDs.size());
+        assertEquals(12345, studentIDs.get("sarah").intValue());
+        studentIDs.put("alan", 345);
+        assertEquals(2, studentIDs.size());
+        assertEquals(12345, studentIDs.get("sarah").intValue());
+        assertEquals(345, studentIDs.get("alan").intValue());
+        Integer res = studentIDs.remove("sarah", 12345);
+        assertEquals(12345, res.intValue());
+        assertEquals(1, studentIDs.size());
+        res = studentIDs.remove("alan", 123);
+        assertEquals(null, res);
+        assertEquals(1, studentIDs.size());
+        assertFalse(studentIDs.containsKey("sarah"));
+        assertTrue(studentIDs.containsKey("alan"));
+    }
+
+    @Test
+    public void testIterator() {
+        MyHashMap<String, Integer> studentIDs = new MyHashMap<>();
+        studentIDs.put("sarah", 12345);
+        studentIDs.put("alan", 345);
+        studentIDs.put("set", 435);
+        Iterator<String> res = studentIDs.iterator();
+        Set<String> container = new HashSet<>();
+        while (res.hasNext()) {
+            String next = res.next();
+            System.out.println(next);
+            container.add(next);
+        }
+        System.out.println("end");
+        Set<String> expected = new HashSet<>();
+        expected.add("sarah");
+        expected.add("alan");
+        expected.add("set");
+        assertEquals(expected, container);
+    }
+
 
     public static void main(String[] args) {
         jh61b.junit.TestRunner.runTests(TestMyHashMap.class);

@@ -5,8 +5,10 @@ import huglife.Action;
 import huglife.Occupant;
 import huglife.HugLifeUtils;
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.List;
+import java.util.Random;
 
 /** An implementation of a motile pacifist photosynthesizer.
  *  @author Josh Hug
@@ -41,12 +43,16 @@ public class Plip extends Creature {
      *  linearly in between these two extremes. It's not absolutely vital
      *  that you get this exactly correct.
      */
+    @Override
     public Color color() {
-        g = 63;
+        r = 99;
+        b = 76;
+        g = (int) Math.round(this.energy * 0.5 * (255 - 63) + 63);
         return color(r, g, b);
     }
 
     /** Do nothing with C, Plips are pacifists. */
+    @Override
     public void attack(Creature c) {
     }
 
@@ -54,20 +60,27 @@ public class Plip extends Creature {
      *  to avoid the magic number warning, you'll need to make a
      *  private static final variable. This is not required for this lab.
      */
+    @Override
     public void move() {
+        this.energy -= 0.15;
     }
 
 
     /** Plips gain 0.2 energy when staying due to photosynthesis. */
+    @Override
     public void stay() {
+        this.energy = Math.min(this.energy + 0.2, 2);
     }
 
     /** Plips and their offspring each get 50% of the energy, with none
      *  lost to the process. Now that's efficiency! Returns a baby
      *  Plip.
      */
+    @Override
     public Plip replicate() {
-        return this;
+        Plip np = new Plip(this.energy * 0.5);
+        this.energy *= 0.5;
+        return np;
     }
 
     /** Plips take exactly the following actions based on NEIGHBORS:
@@ -80,8 +93,42 @@ public class Plip extends Creature {
      *  scoop on how Actions work. See SampleCreature.chooseAction()
      *  for an example to follow.
      */
+    @Override
     public Action chooseAction(Map<Direction, Occupant> neighbors) {
-        return new Action(Action.ActionType.STAY);
-    }
+        List<Direction> available = new ArrayList<>();
+        boolean seeClorus = false;
+        for (Direction d: neighbors.keySet()) {
+            if (neighbors.get(d).name().equals("empty")) {
+                available.add(d);
+            }
+            if (neighbors.get(d).name().equals("clorus")) {
+                seeClorus = true;
+            }
+        }
 
+        if (available.size() == 0) {
+            return new Action(Action.ActionType.STAY);
+        } else {
+            if (this.energy > 1) {
+                Random r = new Random();
+                int rIndex = r.nextInt(available.size());
+                return new Action(Action.ActionType.REPLICATE, available.get(rIndex));
+            } else {
+                if (seeClorus) {
+                    Random r = new Random();
+                    int rIndex = r.nextInt(available.size());
+                    // 一半的概率会move
+                    double rDouble = r.nextDouble(); // 我们可以看源码，发现nextDouble就是一个均匀分布
+                    if (rDouble < 0.5) {
+                        // 返回Action
+                        return new Action(Action.ActionType.MOVE, available.get(rIndex));
+                    } else {
+                        return new Action(Action.ActionType.STAY);
+                    }
+                } else {
+                    return new Action(Action.ActionType.STAY);
+                }
+            }
+        }
+    }
 }

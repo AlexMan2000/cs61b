@@ -1,7 +1,6 @@
 package lab9;
 
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Implementation of interface Map61B with BST as core data structure.
@@ -44,7 +43,21 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      *  or null if this map contains no mapping for the key.
      */
     private V getHelper(K key, Node p) {
-        throw new UnsupportedOperationException();
+        if (key == null) {
+            throw new IllegalArgumentException("calls get() with a null key");
+        }
+        if (p == null) {
+            return null;
+        }
+
+        int cmp = key.compareTo(p.key);
+        if (cmp > 0) {
+            return getHelper(key, p.right);
+        } else if (cmp < 0) {
+            return getHelper(key, p.left);
+        } else {
+            return p.value;
+        }
     }
 
     /** Returns the value to which the specified key is mapped, or null if this
@@ -52,14 +65,28 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      */
     @Override
     public V get(K key) {
-        throw new UnsupportedOperationException();
+        return getHelper(key, root);
     }
 
     /** Returns a BSTMap rooted in p with (KEY, VALUE) added as a key-value mapping.
       * Or if p is null, it returns a one node BSTMap containing (KEY, VALUE).
      */
     private Node putHelper(K key, V value, Node p) {
-        throw new UnsupportedOperationException();
+        if (p == null) {
+            // Update the size!
+            size += 1;
+            return new Node(key, value);
+        }
+
+        int cmp = key.compareTo(p.key);
+        if (cmp < 0) {
+            p.left = putHelper(key, value, p.left);
+        } else if (cmp > 0) {
+            p.right = putHelper(key, value, p.right);
+        } else {
+            p.value = value;
+        }
+        return p;
     }
 
     /** Inserts the key KEY
@@ -67,13 +94,17 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      */
     @Override
     public void put(K key, V value) {
-        throw new UnsupportedOperationException();
+        if (key == null) {
+            throw new IllegalArgumentException("calls get() with a null key");
+        }
+        // Don't forget to update the root
+        root = putHelper(key, value, root);
     }
 
     /* Returns the number of key-value mappings in this map. */
     @Override
     public int size() {
-        throw new UnsupportedOperationException();
+        return size;
     }
 
     //////////////// EVERYTHING BELOW THIS LINE IS OPTIONAL ////////////////
@@ -81,7 +112,20 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     /* Returns a Set view of the keys contained in this map. */
     @Override
     public Set<K> keySet() {
-        throw new UnsupportedOperationException();
+        Set<K> res = new HashSet<>();
+        // Traverse the tree
+        keySetHelper(root, res);
+        return res;
+    }
+
+    public void keySetHelper(Node p, Set<K> s) {
+        if (p == null) {
+            return;
+        }
+        // DFS Traversal
+        s.add(p.key);
+        keySetHelper(p.left, s);
+        keySetHelper(p.right, s);
     }
 
     /** Removes KEY from the tree if present
@@ -90,8 +134,13 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      */
     @Override
     public V remove(K key) {
-        throw new UnsupportedOperationException();
+        V v = get(key);
+        if (v != null) {
+            return remove(key, v);
+        }
+        return null;
     }
+
 
     /** Removes the key-value entry for the specified key only if it is
      *  currently mapped to the specified value.  Returns the VALUE removed,
@@ -99,11 +148,114 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      **/
     @Override
     public V remove(K key, V value) {
-        throw new UnsupportedOperationException();
+        if (key == null) {
+            throw new IllegalArgumentException();
+        }
+        V v = get(key);
+        if (value != null) {
+            removeHelper(key, value, root);
+            size = sizeT(root);
+            return v;
+        } else {
+            return null;
+        }
     }
+
+
+    public Node removeHelper(K key, V value, Node p) {
+        int cmp = key.compareTo(p.key);
+        if (cmp > 0) {
+            p.right = removeHelper(key, value, p.right);
+        } else if (cmp < 0) {
+            p.left = removeHelper(key, value, p.left);
+        } else {
+            if (p.value.equals(value)) {
+                if (p.left == null) {
+                    return p.right;
+                }
+                if (p.right == null) {
+                    return p.left;
+                }
+                // Two children
+                // 1. Find successor(or predecessor)
+                Node successor = findMin(p.right);
+//                Node predecessor = findMax(p.left);
+
+                // 2. Exchange the value of the successor and the node to be deleted.
+                K sKey = successor.key;
+                V sValue = successor.value;
+                p.right = removeHelper(sKey, value, p);
+                p.value = sValue;
+                return p;
+            }
+        }
+        return p;
+    }
+
+    /**
+     * Find the smallest element in the tree rooted at p
+     * @param p
+     * @return
+     */
+    public Node findMin(Node p) {
+        while (!isLeaf(p)) {
+            p = p.left;
+        }
+        return p;
+    }
+
+    /**
+     * Find the maximum element in the tree rooted at p
+     * @param p
+     * @return
+     */
+    public Node findMax(Node p) {
+        while (!isLeaf(p)) {
+            p = p.right;
+        }
+        return p;
+    }
+
+    /**
+     * See if the node is leaf node
+     * @param p
+     * @return
+     */
+    public boolean isLeaf(Node p) {
+        if (p.left == null && p.right == null) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Return the size of the tree rooted at p
+     * @return
+     */
+    public int sizeT(Node p) {
+        if (p == null) {
+            return 0;
+        }
+        return sizeT(p.left) + sizeT(p.right) + 1;
+    }
+
 
     @Override
     public Iterator<K> iterator() {
-        throw new UnsupportedOperationException();
+        List<K> allKeys;
+        allKeys = new ArrayList<>();
+        getAllKeys(allKeys, root);
+        return allKeys.iterator();
+    }
+
+
+    public void getAllKeys(List<K> container, Node p) {
+        if (p == null) {
+            return;
+        }
+        // Pre-DFS Traversal
+        container.add(p.key);
+        getAllKeys(container, p.left);
+        getAllKeys(container, p.right);
     }
 }

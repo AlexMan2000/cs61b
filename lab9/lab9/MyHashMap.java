@@ -1,5 +1,6 @@
 package lab9;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -13,12 +14,19 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
 
     private static final int DEFAULT_SIZE = 16;
     private static final double MAX_LF = 0.75;
+    private static int MAX_CAPACITY = DEFAULT_SIZE;
 
     private ArrayMap<K, V>[] buckets;
     private int size;
 
+
     private int loadFactor() {
         return size / buckets.length;
+    }
+
+    // Add for testing
+    public int maxCapacity() {
+        return MAX_CAPACITY;
     }
 
     public MyHashMap() {
@@ -53,19 +61,59 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      */
     @Override
     public V get(K key) {
-        throw new UnsupportedOperationException();
+        if (key == null) {
+            throw new IllegalArgumentException("No such key!");
+        }
+
+        return buckets[hash(key)].get(key);
     }
 
     /* Associates the specified value with the specified key in this map. */
     @Override
     public void put(K key, V value) {
-        throw new UnsupportedOperationException();
+        if (key == null) {
+            throw new IllegalArgumentException("No such key!");
+        }
+        ArrayMap<K, V> bucket = buckets[hash(key)];
+        int oSize = bucket.size();
+        bucket.put(key, value);
+        if (bucket.size() > oSize) {
+            size++;
+        }
+        resize();
     }
 
     /* Returns the number of key-value mappings in this map. */
     @Override
     public int size() {
-        throw new UnsupportedOperationException();
+        return size;
+    }
+
+    /**
+     * Resize the bucket size and rehash
+     */
+    private void resize() {
+        if (size >= MAX_LF * MAX_CAPACITY) {
+            int newSize = MAX_CAPACITY * 2;
+            ArrayMap<K, V>[] newBuckets = new ArrayMap[newSize];
+            MAX_CAPACITY = newSize;
+
+            // Initialiing
+            for (int i = 0; i < newBuckets.length; i++) {
+                newBuckets[i] = new ArrayMap<>();
+            }
+
+            // Copying
+            for (int i = 0; i < buckets.length; i++) {
+                ArrayMap<K, V> bucket = buckets[i];
+                for (K key: bucket.keySet()) {
+                    // Hashing
+                    int bIndex = Math.floorMod(key.hashCode(), newSize);
+                    newBuckets[bIndex].put(key, bucket.get(key));
+                }
+            }
+            buckets = newBuckets;
+        }
     }
 
     //////////////// EVERYTHING BELOW THIS LINE IS OPTIONAL ////////////////
@@ -73,7 +121,12 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     /* Returns a Set view of the keys contained in this map. */
     @Override
     public Set<K> keySet() {
-        throw new UnsupportedOperationException();
+        Set<K> res = new HashSet<>();
+        for (int i = 0; i < buckets.length; i++) {
+            ArrayMap<K, V> bucket = buckets[i];
+            res.addAll(bucket.keySet());
+        }
+        return res;
     }
 
     /* Removes the mapping for the specified key from this map if exists.
@@ -81,7 +134,17 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * UnsupportedOperationException. */
     @Override
     public V remove(K key) {
-        throw new UnsupportedOperationException();
+        if (key == null) {
+            throw new IllegalArgumentException("The argument is illegal");
+        }
+        int hashCode = hash(key);
+        ArrayMap<K, V> bucket = buckets[hashCode];
+        int oSize = bucket.size();
+        V res = bucket.remove(key);
+        if (bucket.size() < oSize) {
+            size--;
+        }
+        return res;
     }
 
     /* Removes the entry for the specified key only if it is currently mapped to
@@ -89,11 +152,63 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * throw an UnsupportedOperationException.*/
     @Override
     public V remove(K key, V value) {
-        throw new UnsupportedOperationException();
+        if (key == null) {
+            throw new IllegalArgumentException("The argument is illegal");
+        }
+        int hashCode = hash(key);
+        ArrayMap<K, V> bucket = buckets[hashCode];
+        int oSize = bucket.size();
+        // Only when the value is specified.
+        if (bucket.get(key).equals(value)) {
+            V res = bucket.remove(key);
+            if (bucket.size() < oSize) {
+                size--;
+            }
+            return res;
+        }
+        return null;
+    }
+
+    private class HashMapIterator implements Iterator<K> {
+
+        int bucketIndex;
+        Iterator<K> currentBucket;
+
+        HashMapIterator() {
+            bucketIndex = 0;
+            currentBucket = buckets[bucketIndex].iterator();
+        }
+
+        private boolean bound() {
+            return bucketIndex >= buckets.length - 1;
+        }
+
+        @Override
+        public boolean hasNext() {
+            if (currentBucket.hasNext()) {
+                return true;
+            }
+
+            while (!currentBucket.hasNext()) {
+                if (bound()) {
+                    return false;
+                }
+                currentBucket = buckets[bucketIndex++].iterator();
+            }
+            return true;
+        }
+
+        @Override
+        public K next() {
+            if (hasNext()) {
+                return currentBucket.next();
+            }
+            throw new RuntimeException("Stop Iteration!");
+        }
     }
 
     @Override
     public Iterator<K> iterator() {
-        throw new UnsupportedOperationException();
+        return new HashMapIterator();
     }
 }

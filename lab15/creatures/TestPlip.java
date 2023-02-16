@@ -1,8 +1,12 @@
 package creatures;
 import org.junit.Test;
 import static org.junit.Assert.*;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.awt.Color;
+import java.util.List;
+
 import huglife.Direction;
 import huglife.Action;
 import huglife.Occupant;
@@ -36,10 +40,12 @@ public class TestPlip {
 
     @Test
     public void testReplicate() {
-
+        Plip p = new Plip(1.5);
+        Plip op = p.replicate();
+        assertNotSame(p, op);
     }
 
-    //@Test
+    @Test
     public void testChoose() {
         Plip p = new Plip(1.2);
         HashMap<Direction, Occupant> surrounded = new HashMap<Direction, Occupant>();
@@ -56,6 +62,47 @@ public class TestPlip {
         Action expected = new Action(Action.ActionType.STAY);
 
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testChooseRule2() {
+        Plip p = new Plip(1.2);
+        HashMap<Direction, Occupant> surrounded = new HashMap<Direction, Occupant>();
+        surrounded.put(Direction.TOP, new Empty());
+        surrounded.put(Direction.BOTTOM, new Impassible());
+        surrounded.put(Direction.LEFT, new Empty());
+        surrounded.put(Direction.RIGHT, new Impassible());
+
+
+        Action actual = p.chooseAction(surrounded);
+        List<Action> expected = new ArrayList<>();
+        expected.add(new Action(Action.ActionType.REPLICATE,Direction.LEFT));
+        expected.add(new Action(Action.ActionType.REPLICATE,Direction.TOP));
+
+        assertTrue(expected.contains(actual));
+    }
+
+    @Test
+    public void testChooseRule3() {
+        Plip p = new Plip(0.8);
+        HashMap<Direction, Occupant> surrounded = new HashMap<Direction, Occupant>();
+        surrounded.put(Direction.TOP, new Empty());
+        surrounded.put(Direction.BOTTOM, new Impassible());
+        surrounded.put(Direction.LEFT, new Empty());
+        surrounded.put(Direction.RIGHT, new Impassible());
+
+
+        Action actual = p.chooseAction(surrounded);
+        List<Action> expected = new ArrayList<>();
+        expected.add(new Action(Action.ActionType.REPLICATE,Direction.LEFT));
+        expected.add(new Action(Action.ActionType.REPLICATE,Direction.TOP));
+
+        assertFalse(expected.contains(actual));
+    }
+
+    @Test
+    public void testChooseRule4() {
+
     }
 
     public static void main(String[] args) {
