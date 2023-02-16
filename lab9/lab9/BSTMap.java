@@ -155,13 +155,11 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
             throw new IllegalArgumentException();
         }
         V v = get(key);
-        if (value != null) {
+        if (v != null) {
             root = removeHelper(key, value, root);
             size = sizeT(root);
-            return v;
-        } else {
-            return null;
         }
+        return v;
     }
 
 
@@ -187,8 +185,8 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
                 // 2. Exchange the value of the successor and the node to be deleted.
                 K sKey = successor.key;
                 V sValue = successor.value;
-                p.right = removeHelper(sKey, value, p);
                 p.value = sValue;
+                p.right = removeHelper(sKey, sValue, p.right);
                 return p;
             }
         }
