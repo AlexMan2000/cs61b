@@ -1,14 +1,15 @@
 package hw2;
 
-import edu.princeton.cs.algs4.QuickFindUF;
+//import edu.princeton.cs.algs4.QuickFindUF;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
+//import edu.princeton.cs.algs4.QuickFindUF;
 
 public class Percolation {
     private int size;
     private int[][] grid;
-//    private WeightedQuickUnionUF wqu;
-    private QuickFindUF wqu;
+    private WeightedQuickUnionUF wqu;
+//    private QuickFindUF wqu;
     private int numOpen;
 
     // create N-by-N grid, with all sites initially blocked
@@ -24,8 +25,8 @@ public class Percolation {
 
         // Initialize the disjoint set data structure to track the connection
         // WeightedQuickUnionUF, creating N*N nodes 0,1,...,N*N, row by row
-//        wqu = new WeightedQuickUnionUF(N * N);
-        wqu = new QuickFindUF(N * N);
+        wqu = new WeightedQuickUnionUF(N * N);
+//        wqu = new QuickFindUF(N * N);
 
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
