@@ -134,6 +134,9 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      */
     @Override
     public V remove(K key) {
+        if (key == null) {
+            throw new IllegalArgumentException();
+        }
         V v = get(key);
         if (v != null) {
             return remove(key, v);
@@ -153,7 +156,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         }
         V v = get(key);
         if (value != null) {
-            removeHelper(key, value, root);
+            root = removeHelper(key, value, root);
             size = sizeT(root);
             return v;
         } else {
@@ -198,10 +201,10 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      * @return
      */
     public Node findMin(Node p) {
-        while (!isLeaf(p)) {
-            p = p.left;
+        if (p.left == null) {
+            return p;
         }
-        return p;
+        return findMin(p.left);
     }
 
     /**
@@ -210,22 +213,10 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      * @return
      */
     public Node findMax(Node p) {
-        while (!isLeaf(p)) {
-            p = p.right;
+        if (p.right == null) {
+            return p;
         }
-        return p;
-    }
-
-    /**
-     * See if the node is leaf node
-     * @param p
-     * @return
-     */
-    public boolean isLeaf(Node p) {
-        if (p.left == null && p.right == null) {
-            return true;
-        }
-        return false;
+        return findMax(p.right);
     }
 
     /**
