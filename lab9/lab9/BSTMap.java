@@ -265,7 +265,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         return childNodes;
     }
 
-    private void printTreeStructure() {
+    public void printTreeStructure() {
         printTreeStructure(root, 0);
     }
 

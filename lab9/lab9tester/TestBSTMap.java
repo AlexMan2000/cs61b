@@ -116,18 +116,11 @@ public class TestBSTMap {
         b.put(7, 1);
         b.printTreeStructure();
 
-        // Now we remove
+        // Now we remove the root
         b.remove(4);
         System.out.println("remove root");
         b.printTreeStructure();
     }
-
-
-    @Test
-    public void testRemoveRoot() {
-
-    }
-
 
 
     public static void main(String[] args) {

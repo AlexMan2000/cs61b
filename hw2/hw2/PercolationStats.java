@@ -7,21 +7,19 @@ import java.util.List;
 
 public class PercolationStats {
     List<Double> container;
-    int size;
+    int N;
     int T;
-    Percolation p;
+    PercolationFactory pc;
 
     // perform T independent experiments on an N-bfy-N grid
-    public PercolationStats(int N, int T, PercolationFactory pf) {
+    public PercolationStats(int N, int T, PercolationFactory pc) {
         if (N <= 0 || T <= 0) {
             throw new IllegalArgumentException("The argument is illegal!");
         }
 
-        size = N;
+        this.N = N;
         this.T = T;
-        // Initialize all sites to be blocked
-        p = pf.make(N);
-
+        this.pc = pc;
         container = simulate();
     }
 
@@ -59,18 +57,20 @@ public class PercolationStats {
     }
 
 
-    public List<Double> simulate() {
+    private List<Double> simulate() {
         List<Double> al = new ArrayList<>();
+
         for (int i = 0; i < T; i++) {
             al.add(simulateOnce());
         }
         return al;
     }
 
-    public double simulateOnce() {
+    private double simulateOnce() {
+        Percolation p = pc.make(N);
         while (!p.percolates()) {
-            int rrow = StdRandom.uniform(size);
-            int rcol = StdRandom.uniform(size);
+            int rrow = StdRandom.uniform(N);
+            int rcol = StdRandom.uniform(N);
             p.open(rrow, rcol);
         }
         return p.numberOfOpenSites();
