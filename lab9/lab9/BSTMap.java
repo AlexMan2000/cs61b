@@ -1,5 +1,6 @@
 package lab9;
 
+
 import java.util.*;
 
 /**
@@ -185,6 +186,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
                 // 2. Exchange the value of the successor and the node to be deleted.
                 K sKey = successor.key;
                 V sValue = successor.value;
+                p.key = sKey;
                 p.value = sValue;
                 p.right = removeHelper(sKey, sValue, p.right);
                 return p;
@@ -246,5 +248,37 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         container.add(p.key);
         getAllKeys(container, p.left);
         getAllKeys(container, p.right);
+    }
+
+    // Helper Method in visualizing trees, should be commented when submitted
+    private List<Node> branches(Node p) {
+        List<Node> childNodes = new ArrayList<>();
+        if (p == null) {
+            return childNodes;
+        }
+        if (p.left != null) {
+            childNodes.add(p.left);
+        }
+        if (p.right != null) {
+            childNodes.add(p.right);
+        }
+        return childNodes;
+    }
+
+    private void printTreeStructure() {
+        printTreeStructure(root, 0);
+    }
+
+    private void printTreeStructure(Node p, int indent) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < indent; i++) {
+            sb.append(" ");
+        }
+        sb.append(p.key);
+        System.out.println(sb.toString());
+        List<Node> allChildren = branches(p);
+        for (Node n: allChildren) {
+            printTreeStructure(n, indent + 1);
+        }
     }
 }

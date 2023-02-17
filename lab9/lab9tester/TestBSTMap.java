@@ -6,6 +6,7 @@ import org.junit.Test;
 import lab9.BSTMap;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -103,6 +104,29 @@ public class TestBSTMap {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void testRemove() {
+        BSTMap<Integer, Integer> b = new BSTMap<>();
+        b.put(4, 1);
+        b.put(2, 1);
+        b.put(1, 1);
+        b.put(3, 1);
+        b.put(6, 1);
+        b.put(5, 1);
+        b.put(7, 1);
+        b.printTreeStructure();
+
+        // Now we remove
+        b.remove(4);
+        System.out.println("remove root");
+        b.printTreeStructure();
+    }
+
+
+    @Test
+    public void testRemoveRoot() {
+
+    }
 
 
 
