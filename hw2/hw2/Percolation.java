@@ -111,18 +111,17 @@ public class Percolation {
         if (size == 1) {
             if (numberOfOpenSites() == 1) {
                 return true;
-            } else {
-                return false;
             }
-        }
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                // Bottom row
-                int bGrid1D = xyTo1D(size - 1, i);
-                // Top Row
-                int tGrid1D = xyTo1D(0, j);
-                if (wqu.connected(bGrid1D, tGrid1D)) {
-                    return true;
+        } else {
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < size; j++) {
+                    // Bottom row
+                    int bGrid1D = xyTo1D(size - 1, i);
+                    // Top Row
+                    int tGrid1D = xyTo1D(0, j);
+                    if (wqu.connected(bGrid1D, tGrid1D)) {
+                        return true;
+                    }
                 }
             }
         }
@@ -130,9 +129,9 @@ public class Percolation {
     }
 
     // use for unit testing (not required)
-//    public static void main(String[] args) {
-//
-//    }
+    public static void main(String[] args) {
+
+    }
 
 
     /**

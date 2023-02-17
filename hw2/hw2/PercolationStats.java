@@ -58,7 +58,7 @@ public class PercolationStats {
         return confidenceHigh;
     }
 
-    public static void main(String[] args) {
+    private static void main(String[] args) {
         PercolationFactory p = new PercolationFactory();
         int[] nList = new int[] {50};
         int[] tList = new int[] {100, 200, 400, 800};
