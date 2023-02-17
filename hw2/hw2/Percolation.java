@@ -109,9 +109,7 @@ public class Percolation {
     public boolean percolates() {
         // If any of the bottom elements are connected to the top ones, then the system percolates
         if (size == 1) {
-            if (numberOfOpenSites() == 1) {
-                return true;
-            }
+            return numberOfOpenSites() == 1;
         } else {
             for (int i = 0; i < size; i++) {
                 for (int j = 0; j < size; j++) {
