@@ -52,6 +52,7 @@ public class PercolationVisualizer {
         StdDraw.setFont(new Font("SansSerif", Font.PLAIN, 12));
         StdDraw.setPenColor(StdDraw.BLACK);
         StdDraw.text(.25 * N, -N * .025, perc.numberOfOpenSites() + " open sites");
+        System.out.println(perc.percolates()); // Added
         if (perc.percolates()) {
             StdDraw.text(.75 * N, -N * .025, "percolates");
         } else {

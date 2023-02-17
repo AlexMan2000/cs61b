@@ -108,9 +108,18 @@ public class Percolation {
     // does the system percolate?
     public boolean percolates() {
         // If any of the bottom elements are connected to the top ones, then the system percolates
+        if (size == 1) {
+            if (numberOfOpenSites() == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        }
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
+                // Bottom row
                 int bGrid1D = xyTo1D(size - 1, i);
+                // Top Row
                 int tGrid1D = xyTo1D(0, j);
                 if (wqu.connected(bGrid1D, tGrid1D)) {
                     return true;
@@ -121,9 +130,9 @@ public class Percolation {
     }
 
     // use for unit testing (not required)
-    public static void main(String[] args) {
-
-    }
+//    public static void main(String[] args) {
+//
+//    }
 
 
     /**
@@ -137,7 +146,7 @@ public class Percolation {
      * @param col
      * @return
      */
-    public int xyTo1D(int row, int col) {
+    private int xyTo1D(int row, int col) {
         return row * size + col;
     }
 
@@ -146,7 +155,7 @@ public class Percolation {
      * @param row
      * @param col
      */
-    public void validateCor(int row, int col) {
+    private void validateCor(int row, int col) {
         if (!(row >= 0 && row < size && col >= 0 && col < size)) {
             throw new IndexOutOfBoundsException("Invalid coordinate, please check your input!");
         }
