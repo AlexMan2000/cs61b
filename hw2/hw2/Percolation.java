@@ -8,7 +8,10 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 public class Percolation {
     private int size;
     private int[][] grid;
+    // The disjoint set with top and bottom virtual nodes
     private WeightedQuickUnionUF wqu;
+    // The disjoint set with just the top virtual node.
+    private WeightedQuickUnionUF wquForBlockedBackWash;
 //    private QuickFindUF wqu;
     private int numOpen;
 
@@ -24,10 +27,14 @@ public class Percolation {
         numOpen = 0;
 
         // Initialize the disjoint set data structure to track the connection
-        // WeightedQuickUnionUF, creating N*N nodes 0,1,...,N*N, row by row
-        wqu = new WeightedQuickUnionUF(N * N);
-//        wqu = new QuickFindUF(N * N);
+        // Creating node 0,1,2,...., N*N - 1 for grid points
+        // Adding two virtual nodes, where N * N for top virtual point
+        // and N * N + 1 for bottom virtual point
+        wqu = new WeightedQuickUnionUF(N * N + 2);
+        wquForBlockedBackWash = new WeightedQuickUnionUF(N * N + 1);
+//        wqu = new QuickFindUF(N * N + 2);
 
+        // Initialize the concrete grids
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 grid[i][j] = 0;
@@ -51,25 +58,38 @@ public class Percolation {
             isO = isOpen(row, col + 1);
             if (isO) {
                 wqu.union(xyTo1D(row, col), xyTo1D(row, col + 1));
+                wquForBlockedBackWash.union(xyTo1D(row, col), xyTo1D(row, col + 1));
             }
         }
         if (col - 1 >= 0) {
             isO = isOpen(row, col - 1);
             if (isO) {
                 wqu.union(xyTo1D(row, col), xyTo1D(row, col - 1));
+                wquForBlockedBackWash.union(xyTo1D(row, col), xyTo1D(row, col - 1));
             }
         }
         if (row + 1 < size) {
             isO = isOpen(row + 1, col);
             if (isO) {
                 wqu.union(xyTo1D(row, col), xyTo1D(row + 1, col));
+                wquForBlockedBackWash.union(xyTo1D(row, col), xyTo1D(row + 1, col));
             }
         }
         if (row - 1 >= 0) {
             isO = isOpen(row - 1, col);
             if (isO) {
                 wqu.union(xyTo1D(row, col), xyTo1D(row - 1, col));
+                wquForBlockedBackWash.union(xyTo1D(row, col), xyTo1D(row - 1, col));
             }
+        }
+        // Connect to the top
+        if (row == 0) {
+            wqu.union(xyTo1D(row, col), size * size);
+            wquForBlockedBackWash.union(xyTo1D(row, col), size * size);
+        }
+        // Don't connect to the bottom for wquForBlockedBackWash
+        if (row == size - 1) {
+            wqu.union(xyTo1D(row, col), size * size + 1);
         }
         numOpen++;
     }
@@ -80,24 +100,10 @@ public class Percolation {
         return grid[row][col] == 1; // opened
     }
 
-    // is the site (row, col) full?
+    // is the site (row, col) full? Should prevent backwash
     public boolean isFull(int row, int col) {
         validateCor(row, col);
-        if (row == 0) {
-            if (isOpen(row, col)) {
-                return true;
-            }
-            return false;
-        } else {
-            for (int i = 0; i < size; i++) {
-                int grid1Dtop = xyTo1D(0, i);
-                int grid1D = xyTo1D(row, col);
-                if (wqu.connected(grid1Dtop, grid1D)) {
-                    return true;
-                }
-            }
-            return false;
-        }
+        return wquForBlockedBackWash.connected(xyTo1D(row, col), size * size);
     }
 
     // number of open sites
@@ -107,23 +113,8 @@ public class Percolation {
 
     // does the system percolate?
     public boolean percolates() {
-        // If any of the bottom elements are connected to the top ones, then the system percolates
-        if (size == 1) {
-            return numberOfOpenSites() == 1;
-        } else {
-            for (int i = 0; i < size; i++) {
-                for (int j = 0; j < size; j++) {
-                    // Bottom row
-                    int bGrid1D = xyTo1D(size - 1, i);
-                    // Top Row
-                    int tGrid1D = xyTo1D(0, j);
-                    if (wqu.connected(bGrid1D, tGrid1D)) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
+        // If the top and bottom are connected, then the system percolates.
+        return wqu.connected(size * size, size * size + 1);
     }
 
     // use for unit testing (not required)
@@ -146,6 +137,7 @@ public class Percolation {
     private int xyTo1D(int row, int col) {
         return row * size + col;
     }
+
 
     /**
      * Validate whether a 2D coordinate is valid, otherwise throw an exception

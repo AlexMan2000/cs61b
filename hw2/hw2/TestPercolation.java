@@ -11,4 +11,5 @@ public class TestPercolation {
 //    public void testConversion() {
 //        assertEquals(24, p.xyTo1D(4, 4));
 //    }
+
 }
