@@ -1,4 +1,6 @@
 import org.junit.Test;
+import org.w3c.dom.Node;
+
 import static org.junit.Assert.*;
 
 /**
@@ -109,9 +111,8 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
 
         /** TODO: Your code here. */
         int parentIndex = parentIndex(index);
-        Node parent = contents[parentIndex];
         // 已经swim到了heap的顶部，所以不需要再swim了，递归终止
-        if (parent == null) {
+        if (!inBounds(parentIndex)) {
             return;
         }
         if (min(index, parentIndex) == index) {
@@ -126,7 +127,6 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
     private void sink(int index) {
         // Throws an exception if index is invalid. DON'T CHANGE THIS LINE.
         validateSinkSwimArg(index);
-
         /** TODO: Your code here. */
         // Since the leftNode and rightNode are both bigger than the current Node
         // So here we always pick the node with greater priority to swap for autograder test.
@@ -134,10 +134,14 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
         if (!inBounds(leftIndex)) {
             return;
         }
+        // We choose the children with smaller priority to swap
+        // For example, if the current node's priority is 9, the left priority is
+        // 4, and the right one is 3, we will choose the right one to swap, so here
+        // we compare the priority of leftIndex and rightIndex to find the smaller one.
+        if(min(leftIndex, leftIndex + 1) == leftIndex + 1) {
+            leftIndex++;
+        }
         if (min(leftIndex, index) == leftIndex) {
-            if(min(leftIndex, leftIndex + 1) == leftIndex + 1) {
-                leftIndex++;
-            }
             swap(leftIndex, index);
             sink(leftIndex);
         }
@@ -170,7 +174,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
     @Override
     public T peek() {
         /* TODO: Your code here! */
-        return contents[0].item();
+        return getNode(1).item();
     }
 
     /**
@@ -217,8 +221,29 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
     @Override
     public void changePriority(T item, double priority) {
         /* TODO: Your code here! */
+        int index = findNodeIndex(item);
+        System.out.println(index);
+        if (index == -1) {
+            return;
+        }
+        double oPriority = contents[index].priority();
+        contents[index] = new Node(item, priority);
+        if (priority > oPriority) {
+            sink(index);
+        } else if (priority < oPriority) {
+            swim(index);
+        }
+    }
 
-        return;
+    private int findNodeIndex(T item) {
+        int i = 0;
+        for (Node p: contents) {
+            if (p != null && p.item().equals(item)) {
+                return i;
+            }
+            i++;
+        }
+        return -1;
     }
 
     /**
@@ -453,6 +478,36 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
             assertEquals(expected[i], pq.removeMin());
             i += 1;
         }
+    }
+
+    @Test
+    public void testPriority() {
+        ArrayHeap<String> pq = new ArrayHeap<>();
+        pq.insert("c", 3);
+        pq.insert("i", 9);
+        pq.insert("g", 7);
+        pq.insert("d", 4);
+        pq.insert("a", 1);
+        pq.insert("h", 8);
+        pq.insert("e", 5);
+        pq.insert("b", 2);
+        pq.insert("m", 3);
+        pq.insert("t", 4);
+        System.out.println("PQ before changePriority");
+        System.out.println(pq);
+        pq.changePriority("b", 8.0);
+        System.out.println("PQ after changePriority");
+        System.out.println(pq);
+        assertEquals(10, pq.size());
+//        assertEquals("b", pq.contents[1].myItem);
+//        assertEquals("c", pq.contents[2].myItem);
+//        assertEquals("e", pq.contents[3].myItem);
+//        assertEquals("c", pq.contents[4].myItem);
+//        assertEquals("d", pq.contents[5].myItem);
+//        assertEquals("h", pq.contents[6].myItem);
+//        assertEquals("g", pq.contents[7].myItem);
+//        assertEquals("i", pq.contents[8].myItem);
+//        assertEquals("d", pq.contents[9].myItem);
     }
 
 }
