@@ -1,6 +1,6 @@
-package lab9;
-
-
+/**
+ * Created by AlexMan
+ */
 import java.util.*;
 
 /**
@@ -40,6 +40,11 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         size = 0;
     }
 
+    @Override
+    public boolean containsKey(K key) {
+        return get(key) != null;
+    }
+
     /** Returns the value mapped to by KEY in the subtree rooted in P.
      *  or null if this map contains no mapping for the key.
      */
@@ -70,7 +75,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     }
 
     /** Returns a BSTMap rooted in p with (KEY, VALUE) added as a key-value mapping.
-      * Or if p is null, it returns a one node BSTMap containing (KEY, VALUE).
+     * Or if p is null, it returns a one node BSTMap containing (KEY, VALUE).
      */
     private Node putHelper(K key, V value, Node p) {
         if (p == null) {
@@ -265,7 +270,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         return childNodes;
     }
 
-    private void printTreeStructure() {
+    public void printTreeStructure() {
         printTreeStructure(root, 0);
     }
 
@@ -281,4 +286,19 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
             printTreeStructure(n, indent + 1);
         }
     }
+
+
+    public void printInOrder() {
+        printInOrderHelper(root);
+    }
+
+    private void printInOrderHelper(Node p) {
+        if (p == null) {
+            return;
+        }
+        printInOrderHelper(p.left);
+        System.out.println(p.key);
+        printInOrderHelper(p.right);
+    }
+
 }

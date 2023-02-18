@@ -28,7 +28,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      */
     private static int leftIndex(int i) {
         /* TODO: Your code here! */
-        return 0;
+        return 2 * i;
     }
 
     /**
@@ -36,7 +36,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      */
     private static int rightIndex(int i) {
         /* TODO: Your code here! */
-        return 0;
+        return 2 * i + 1;
     }
 
     /**
@@ -44,7 +44,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      */
     private static int parentIndex(int i) {
         /* TODO: Your code here! */
-        return 0;
+        return i / 2;
     }
 
     /**
@@ -108,7 +108,16 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
         validateSinkSwimArg(index);
 
         /** TODO: Your code here. */
-        return;
+        int parentIndex = parentIndex(index);
+        Node parent = contents[parentIndex];
+        // 已经swim到了heap的顶部，所以不需要再swim了，递归终止
+        if (parent == null) {
+            return;
+        }
+        if (min(index, parentIndex) == index) {
+            swap(index,parentIndex);
+            swim(parentIndex);
+        }
     }
 
     /**
@@ -119,7 +128,19 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
         validateSinkSwimArg(index);
 
         /** TODO: Your code here. */
-        return;
+        // Since the leftNode and rightNode are both bigger than the current Node
+        // So here we always pick the node with greater priority to swap for autograder test.
+        int leftIndex = leftIndex(index);
+        if (!inBounds(leftIndex)) {
+            return;
+        }
+        if (min(leftIndex, index) == leftIndex) {
+            if(min(leftIndex, leftIndex + 1) == leftIndex + 1) {
+                leftIndex++;
+            }
+            swap(leftIndex, index);
+            sink(leftIndex);
+        }
     }
 
     /**
@@ -134,6 +155,12 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
         }
 
         /* TODO: Your code here! */
+        // Add the node
+        contents[size + 1] = new Node(item, priority);
+        // Re-sort the last Node, size + 1 is an invariant pointing to the
+        // next node to add(why not size, since we start at index 1!)
+        size++;
+        swim(size);
     }
 
     /**
@@ -143,7 +170,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
     @Override
     public T peek() {
         /* TODO: Your code here! */
-        return null;
+        return contents[0].item();
     }
 
     /**
@@ -158,7 +185,16 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
     @Override
     public T removeMin() {
         /* TODO: Your code here! */
-        return null;
+        Node res = getNode(1); // Careful, the first node's index is 1
+        if (res == null) {
+            return null;
+        }
+        T result = res.item();
+        swap(1, size);
+        size--;
+        sink(1);
+        contents[size + 1] = null;
+        return result;
     }
 
     /**
@@ -181,6 +217,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
     @Override
     public void changePriority(T item, double priority) {
         /* TODO: Your code here! */
+
         return;
     }
 
@@ -378,8 +415,12 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
         pq.insert("b", 2);
         pq.insert("c", 3);
         pq.insert("d", 4);
+        System.out.println("PQ before removeMin");
+        System.out.println(pq);
         String removed = pq.removeMin();
         assertEquals("a", removed);
+        System.out.println("PQ after removeMin");
+        System.out.println(pq);
         assertEquals(9, pq.size());
         assertEquals("b", pq.contents[1].myItem);
         assertEquals("c", pq.contents[2].myItem);
