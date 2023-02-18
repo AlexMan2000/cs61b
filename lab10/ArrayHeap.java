@@ -119,47 +119,39 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
 //            swap(index,parentIndex);
 //            swim(parentIndex);
 //        }
-        if (index > 1 && min(index, index / 2) == index) {
-            swap(index, index / 2);
-            swim(index / 2);
+        if (index == 1) {
+            return;
         }
+        if (min(index, parentIndex(index)) == index) {
+            swap(index, parentIndex(index));
+            swim(parentIndex(index));
+        }
+        return;
     }
 
     /**
      * Bubbles down the node currently at the given index.
      */
     private void sink(int index) {
+        if (!inBounds(index)) {
+            return;
+        }
+
         // Throws an exception if index is invalid. DON'T CHANGE THIS LINE.
         validateSinkSwimArg(index);
         /** TODO: Your code here. */
-//        // Since the leftNode and rightNode are both bigger than the current Node
-//        // So here we always pick the node with greater priority to swap for autograder test.
-//        int leftIndex = leftIndex(index);
-//        if (!inBounds(leftIndex)) {
-//            return;
-//        }
-//        // We choose the children with smaller priority to swap
-//        // For example, if the current node's priority is 9, the left priority is
-//        // 4, and the right one is 3, we will choose the right one to swap, so here
-//        // we compare the priority of leftIndex and rightIndex to find the smaller one.
-//        if(min(leftIndex, leftIndex + 1) == leftIndex + 1) {
-//            leftIndex++;
-//        }
-//        if (min(leftIndex, index) == leftIndex) {
-//            swap(leftIndex, index);
-//            sink(leftIndex);
-//        }
-        if (index * 2 <= size) {
-            int j = index * 2;
-            if (j + 1 <= size && min(j, j + 1) == j + 1) {
-                j++;
-            }
-            if (min(j, index) == index) {
-                return;
-            }
-            swap(index, j);
-            sink(j);
+        // Since the leftNode and rightNode are both bigger than the current Node
+        // So here we always pick the node with greater priority to swap for autograder test.
+        // We choose the children with smaller priority to swap
+        // For example, if the current node's priority is 9, the left priority is
+        // 4, and the right one is 3, we will choose the right one to swap, so here
+        // we compare the priority of leftIndex and rightIndex to find the smaller one.
+        int minChild = min(leftIndex(index), rightIndex(index));
+        if (min(index, minChild) == minChild) {
+            swap(index, minChild);
+            sink(minChild);
         }
+        return;
     }
 
     /**
@@ -179,9 +171,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
         // Re-sort the last Node, size + 1 is an invariant pointing to the
         // next node to add(why not size, since we start at index 1!)
         size++;
-        if (size >= 2) {
-            swim(size);
-        }
+        swim(size);
     }
 
     /**
