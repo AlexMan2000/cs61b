@@ -2,6 +2,7 @@ package hw3.hash;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class HashTableVisualizer {
 
@@ -21,7 +22,22 @@ public class HashTableVisualizer {
         HashTableDrawingUtility.setScale(scale);
         List<Oomage> oomies = new ArrayList<>();
         for (int i = 0; i < N; i += 1) {
-           oomies.add(SimpleOomage.randomSimpleOomage());
+//            oomies.add(SimpleOomage.randomSimpleOomage());
+            oomies.add(ComplexOomage.randomComplexOomage());
+//            List<Integer> params = new ArrayList<>();
+//            // Generate a random sequence of variable length
+//            Random r = new Random();
+//            int length = 8;
+//            for (int t = 0; t < length; t++) {
+//                int num = r.nextInt(255);
+//                params.add(num);
+//            }
+//            params.add(0);
+//            params.add(0);
+//            ComplexOomage co = new ComplexOomage(params);
+//            System.out.println(co.params);
+//            System.out.println(co.hashCode());
+//            oomies.add(co);
         }
         visualize(oomies, M, scale);
     }

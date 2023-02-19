@@ -110,15 +110,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
         validateSinkSwimArg(index);
 
         /** TODO: Your code here. */
-//        int parentIndex = parentIndex(index);
-//        // 已经swim到了heap的顶部，所以不需要再swim了，递归终止
-//        if (!inBounds(parentIndex)) {
-//            return;
-//        }
-//        if (min(index, parentIndex) == index) {
-//            swap(index,parentIndex);
-//            swim(parentIndex);
-//        }
+        // 已经swim到了heap的顶部，所以不需要再swim了，递归终止
         if (index == 1) {
             return;
         }
