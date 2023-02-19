@@ -34,7 +34,7 @@ public class TestComplexOomage {
         assertTrue(OomageTestUtility.haveNiceHashCodeSpread(oomages, 10));
     }
 
-    /* TODO: Create a list of Complex Oomages called deadlyList
+    /* Create a list of Complex Oomages called deadlyList
      * that shows the flaw in the hashCode function.
      */
     @Test
@@ -51,6 +51,10 @@ public class TestComplexOomage {
                 int num = r.nextInt(255);
                 params.add(num);
             }
+            // 加入四个零就能保证得到的哈希值一定是0
+            params.add(0);
+            params.add(0);
+            params.add(0);
             params.add(0);
             ComplexOomage co = new ComplexOomage(params);
             deadlyList.add(co);
