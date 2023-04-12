@@ -19,7 +19,7 @@ public class MazeCycles extends MazeExplorer {
         super(m);
         s = m.xyTo1D(1, 1);
         distTo[s] = 0;
-        edgeTo[s] = s;
+//        edgeTo[s] = s;
         edgeHistory = new int[m.V()];
         edgeHistory[s] = s;
     }
@@ -31,34 +31,34 @@ public class MazeCycles extends MazeExplorer {
     }
 
     // Helper methods go here
-    private void dfs(int current, int parent) {
+    private boolean dfs(int current, int parent) {
         marked[current] = true;
         announce();
         for (Integer n: maze.adj(current)) {
             if (!marked[n]) {
-                marked[n] = true;
-                announce();
                 edgeHistory[n] = current;
                 distTo[n] = distTo[current] + 1;
-                dfs(n, current);
+                // See if there is already any cycles during traversal
+                if (!dfs(n, current)) {
+                    return false;
+                }
             } else {
                 if (n != parent) {
                     edgeHistory[n] = current;
-                    announce();
-                    int start = n;
-                    int prev = start;
-                    System.out.println(start);
-                    while (edgeHistory[start] != n) {
+                    int start = current;
+                    int prev;
+                    while (edgeHistory[start] != current) {
                         prev = start;
                         start = edgeHistory[start];
                         edgeTo[start] = prev;
-                        System.out.println(start);
-                        announce();
                     }
-                    return;
+                    edgeTo[current] = n;
+                    announce();
+                    return false;
                 }
             }
         }
+        return true;
     }
 }
 

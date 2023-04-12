@@ -47,8 +47,8 @@ public class MazeBreadthFirstPaths extends MazeExplorer {
                     fringe.enqueue(neighbor);
                     marked[neighbor] = true;
                     edgeTo[neighbor] = n;
-                    announce();
                     distTo[neighbor] = distTo[n] + 1;
+                    announce();
                 }
             }
         }
