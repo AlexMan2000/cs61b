@@ -5,8 +5,7 @@ import java.util.List;
 
 public class Board implements WorldState {
     private int[][] tiles;
-    private int N;
-    private int[][] goal;
+    private int size;
     private enum Direction {
         UP, DOWN, LEFT, RIGHT;
     }
@@ -35,16 +34,36 @@ public class Board implements WorldState {
         public int getY() {
             return y;
         }
+
+        @Override
+        public boolean equals(Object y) {
+            if (this == y) {
+                return true;
+            }
+            if (y == null || getClass() != y.getClass()) {
+                return false;
+            }
+
+            Coordinates other = (Coordinates) y;
+
+            return other.getX() == this.getX() && other.getY() == this.getY();
+        }
+
+        @Override
+        public int hashCode() {
+            return x * 31 + y;
+        }
+
     }
 
     // Constructs a board from an N-by-N array of tiles where
     // tiles[i][j] = tile at row i, column j
     public Board(int[][] tiles) {
         // Ensures immutability
-        N = tiles.length;
-        this.tiles = new int[N][N];
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
+        size = tiles.length;
+        this.tiles = new int[size][size];
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 this.tiles[i][j] = tiles[i][j];
             }
         }
@@ -52,7 +71,7 @@ public class Board implements WorldState {
 
     // Returns value of tile at row i, column j (or 0 if blank)
     public int tileAt(int i, int j) {
-        if (i >= 0 && i <= N && j >= 0 && j <= N) {
+        if (i >= 0 && i <= size && j >= 0 && j <= size) {
             return this.tiles[i][j];
         } else {
             throw new IndexOutOfBoundsException();
@@ -61,7 +80,7 @@ public class Board implements WorldState {
 
     // Check whether the tile at index i,j is inBound
     private boolean checkTileInBound(int i, int j) {
-        if (i >= 0 && i < N && j >= 0 && j < N) {
+        if (i >= 0 && i < size && j >= 0 && j < size) {
             return true;
         }
         return false;
@@ -94,7 +113,7 @@ public class Board implements WorldState {
 
     // Returns the board size N
     public int size() {
-        return N;
+        return size;
     }
 
     //  Returns the neighbors of the current board
@@ -104,8 +123,8 @@ public class Board implements WorldState {
         int x = -1;
         int y = -1;
         List<WorldState> neighbors = new ArrayList<>();
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 if (tileAt(i, j) == 0) {
                     x = i;
                     y = j;
@@ -142,33 +161,17 @@ public class Board implements WorldState {
     }
 
     private int[][] generateGoal() {
-        int[][] goal = new int[N][N];
+        int[][] goal = new int[size][size];
         int index = 1;
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 goal[i][j] = index;
                 index++;
             }
         }
-        goal[N - 1][N - 1] = 0;
+        goal[size - 1][size - 1] = 0;
         return goal; // pass by reference
     }
-
-    // Hamming estimate described below
-    public int hamming() {
-        int distance = 0;
-        int[][] goal = generateGoal();
-
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                if (tileAt(i, j) != goal[i][j] && (i != N - 1 && j != N - 1)) {
-                    distance++;
-                }
-            }
-        }
-        return distance;
-    }
-
 
     private static Coordinates computeCoordinate(int number, int[][] grid) {
         int N = grid.length;
@@ -182,16 +185,35 @@ public class Board implements WorldState {
         return null;
     }
 
+
     private static int computeManhattan(Coordinates c1, Coordinates c2) {
         return Math.abs(c1.getX() - c2.getX()) + Math.abs(c1.getY() - c2.getY());
     }
 
+    private static int computeHamming(Coordinates c1, Coordinates c2) {
+        return c1.equals(c2) ? 0: 1;
+    }
+
+
+    // Hamming estimate described below
+    public int hamming() {
+        int distance = 0;
+        int[][] goal = generateGoal();
+
+        for (int i = 1; i < size * size; i++) {
+            Coordinates goalGrid = computeCoordinate(i, goal);
+            Coordinates currGird = computeCoordinate(i, this.tiles);
+            distance += computeHamming(goalGrid, currGird);
+        }
+
+        return distance;
+    }
 
     // Manhattan estimate described below
     public int manhattan() {
         int distance = 0;
         int[][] goal = generateGoal();
-        for (int i = 1; i < N * N; i++) {
+        for (int i = 1; i < size * size; i++) {
             Coordinates goalGrid = computeCoordinate(i, goal);
             Coordinates currGird = computeCoordinate(i, this.tiles);
             distance += computeManhattan(goalGrid, currGird);
@@ -223,14 +245,26 @@ public class Board implements WorldState {
             return false;
         }
 
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 if (other.tileAt(i, j) != tileAt(i, j)) {
                     return false;
                 }
             }
         }
         return true;
+    }
+
+    // Don't forget to write hashcodes
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                hash = hash * 31 + tileAt(i, j);
+            }
+        }
+        return hash;
     }
 
     /** Returns the string representation of the board. 

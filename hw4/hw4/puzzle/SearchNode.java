@@ -9,12 +9,14 @@ public class SearchNode implements Comparable {
     private int numMoves;
     private int priority;
     private WorldState previousState;
+    private SearchNode previousNode;
 
-    public SearchNode(WorldState ws, int numMoves, WorldState prev) {
+    public SearchNode(WorldState ws, int numMoves, WorldState prevState, SearchNode prevNode) {
         this.ws = ws;
         this.numMoves = numMoves;
         this.priority = this.numMoves + this.ws.estimatedDistanceToGoal();
-        this.previousState = prev;
+        this.previousState = prevState;
+        this.previousNode = prevNode;
     }
 
     @Override
@@ -33,5 +35,9 @@ public class SearchNode implements Comparable {
 
     public WorldState getPreviousState() {
         return previousState;
+    }
+
+    public SearchNode getPreviousNode() {
+        return previousNode;
     }
 }

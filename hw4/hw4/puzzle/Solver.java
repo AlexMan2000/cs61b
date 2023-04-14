@@ -1,6 +1,7 @@
 package hw4.puzzle;
 
 import edu.princeton.cs.algs4.MinPQ;
+import edu.princeton.cs.algs4.Stack;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -31,7 +32,9 @@ public class Solver {
      */
     private Set<WorldState> visited;
 
-    public int numEnqueued;
+    private int numEnqueued;
+
+    private SearchNode finalNode;
 
     public Solver(WorldState initial) {
         // 1. Initialize the priority queue&solution path
@@ -42,7 +45,7 @@ public class Solver {
 
         // 2. Insert the initial world state
         fringe.insert(new SearchNode(initial,
-                0, null));
+                0, null, null));
         numEnqueued++;
 
         // 3. Start solving the puzzle
@@ -56,6 +59,16 @@ public class Solver {
 
 
     public Iterable<WorldState> solution() {
+        // Consturct the path from the finalNode
+        Stack<WorldState> reversePath = new Stack<>();
+        reversePath.push(finalNode.getWorldState());
+        while (finalNode.getPreviousNode() != null) {
+            finalNode = finalNode.getPreviousNode();
+            reversePath.push(finalNode.getWorldState());
+        }
+        while (!reversePath.isEmpty()) {
+            path.add(reversePath.pop());
+        }
         return path;
     }
 
@@ -72,7 +85,7 @@ public class Solver {
                 // Fancier Critical Optimization
                 if (!visited.contains(ws)) {
                     fringe.insert(new SearchNode(ws,
-                            currNode.getMoves() + 1, currState));
+                            currNode.getMoves() + 1, currState, currNode));
                     numEnqueued++;
                 }
             }
@@ -87,21 +100,28 @@ public class Solver {
         SearchNode currNode = fringe.delMin();
         WorldState currState = currNode.getWorldState();
         while (!currState.isGoal()) {
-            path.add(currState);
+            /* Notice that some students would construct the path
+               along the way like the following
+               path.add(currState); But this is wrong because
+               we may add some node that doesn't belong to
+               our path(each time we dequeue the minimum priority element,
+               which is not guaranteed to be on the path)
+               , see A star algorithm for more details
+            */
             Iterable<WorldState> neighbors = currState.neighbors();
             for (WorldState ws: neighbors) {
                 // Only checks for te grandparents, make sure we use equals()
                 // instead of == for instance comparison
                 if (!ws.equals(currNode.getPreviousState())) {
                     fringe.insert(new SearchNode(ws,
-                            currNode.getMoves() + 1, currState));
+                            currNode.getMoves() + 1, currState, currNode));
                     numEnqueued++;
                 }
             }
             currNode = fringe.delMin();
             currState = currNode.getWorldState();
         }
-        path.add(currState);
         numMoves = currNode.getMoves();
+        finalNode = currNode;
     }
 }
