@@ -59,7 +59,7 @@ public class Solver {
 
 
     public Iterable<WorldState> solution() {
-        // Consturct the path from the finalNode
+        // Construct the path from the finalNode
         Stack<WorldState> reversePath = new Stack<>();
         reversePath.push(finalNode.getWorldState());
         while (finalNode.getPreviousNode() != null) {

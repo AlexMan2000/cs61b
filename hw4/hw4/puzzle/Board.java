@@ -36,15 +36,15 @@ public class Board implements WorldState {
         }
 
         @Override
-        public boolean equals(Object y) {
-            if (this == y) {
+        public boolean equals(Object o) {
+            if (this == o) {
                 return true;
             }
-            if (y == null || getClass() != y.getClass()) {
+            if (o == null || getClass() != o.getClass()) {
                 return false;
             }
 
-            Coordinates other = (Coordinates) y;
+            Coordinates other = (Coordinates) o;
 
             return other.getX() == this.getX() && other.getY() == this.getY();
         }
@@ -191,7 +191,7 @@ public class Board implements WorldState {
     }
 
     private static int computeHamming(Coordinates c1, Coordinates c2) {
-        return c1.equals(c2) ? 0: 1;
+        return c1.equals(c2) ? 0 : 1;
     }
 
 
