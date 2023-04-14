@@ -84,5 +84,8 @@ public class CommonBugDetector {
                            + " enqueued in your MinPQ and compare to the comments.");
         // if you print out the total number of items enqueued by s3
         // it should be approximately 25, not approximately 50.
+//        for (WorldState ws: s3.solution()) {
+//            System.out.println(ws);
+//        }
     }
 }

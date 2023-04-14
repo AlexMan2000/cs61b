@@ -44,11 +44,10 @@ public class Solver {
         fringe.insert(new SearchNode(initial,
                 0, null));
         numEnqueued++;
-        path.add(initial);
 
         // 3. Start solving the puzzle
-//        solver();
-        solver2();
+        solver();
+//        solver2();
     }
 
     public int moves() {
@@ -61,7 +60,7 @@ public class Solver {
     }
 
     // Fancier Way Optimization
-    private void solver() {
+    private void solver2() {
         SearchNode currNode = fringe.delMin();
         WorldState currState = currNode.getWorldState();
         visited.add(currState);
@@ -84,15 +83,16 @@ public class Solver {
     }
 
     // Only checks for te grandparents
-    private void solver2() {
+    private void solver() {
         SearchNode currNode = fringe.delMin();
         WorldState currState = currNode.getWorldState();
         while (!currState.isGoal()) {
             path.add(currState);
             Iterable<WorldState> neighbors = currState.neighbors();
             for (WorldState ws: neighbors) {
-                // Only checks for te grandparents
-                if (ws != currNode.getPreviousState()) {
+                // Only checks for te grandparents, make sure we use equals()
+                // instead of == for instance comparison
+                if (!ws.equals(currNode.getPreviousState())) {
                     fringe.insert(new SearchNode(ws,
                             currNode.getMoves() + 1, currState));
                     numEnqueued++;
@@ -101,6 +101,7 @@ public class Solver {
             currNode = fringe.delMin();
             currState = currNode.getWorldState();
         }
+        path.add(currState);
         numMoves = currNode.getMoves();
     }
 }

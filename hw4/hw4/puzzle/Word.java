@@ -71,6 +71,19 @@ public class Word implements WorldState {
     }
 
 
+    // Linear Time Implementation of neighbors()
+    /* @Override
+    public Iterable<WorldState> neighbors() {
+        Set<WorldState> neighbs = new HashSet<>();
+        for (String s : words) {
+            if (editDistance(this.word, s) == 1) {
+                neighbs.add(new Word(s, goal));
+            }
+        }
+        return neighbs;
+    }*/
+
+    // Constant Time Implementation of neighbors()
     @Override
     public Iterable<WorldState> neighbors() {
         Set<WorldState> neighbs = new HashSet<>();
