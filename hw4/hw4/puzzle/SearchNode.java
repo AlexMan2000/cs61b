@@ -7,7 +7,7 @@ public class SearchNode implements Comparable {
 
     private WorldState ws;
     private int numMoves;
-    private int priority;
+    private int priority;  // Caching the results
     private WorldState previousState;
     private SearchNode previousNode;
 
