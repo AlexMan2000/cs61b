@@ -53,6 +53,7 @@ public class TestingMergeSort {
         actual.enqueue("Bob");
         actual.enqueue("Zoe");
         actual.enqueue("Vanessa");
+        int oSize = actual.size();
         Queue<String> expected = new Queue<>();
         expected.enqueue("Alice");
         expected.enqueue("Bob");
@@ -62,8 +63,17 @@ public class TestingMergeSort {
         expected.enqueue("Zoe");
         Queue<String> resQ = MergeSort.mergeSort(actual);
         assertEquals(resQ.size(), expected.size());
+        assertEquals(actual.size(), oSize); // No modification check!
         while (!expected.isEmpty()) {
             assertEquals(resQ.dequeue(), expected.dequeue());
         }
+    }
+
+    @Test
+    public void testMergeSortEmptyInput() {
+        Queue<String> actual = new Queue<>();
+        Queue<String> expected = new Queue<>();
+        Queue<String> resQ = MergeSort.mergeSort(actual);
+        System.out.println(resQ);
     }
 }

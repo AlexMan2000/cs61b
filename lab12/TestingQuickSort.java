@@ -24,8 +24,10 @@ public class TestingQuickSort {
         expected.enqueue("Salmon");
         expected.enqueue("Vanessa");
         expected.enqueue("Zoe");
+        int oSize = actual.size();
         Queue<String> resQ = QuickSort.quickSort(actual);
         assertEquals(resQ.size(), expected.size());
+        assertEquals(actual.size(), oSize); // No modification check!
         while (!expected.isEmpty()) {
             assertEquals(resQ.dequeue(), expected.dequeue());
         }
