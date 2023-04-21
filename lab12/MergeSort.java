@@ -82,6 +82,7 @@ public class MergeSort {
             Queue<Item> second = splittedQueue.dequeue();
             splittedQueue.enqueue(mergeSortedQueues(first, second));
         }
+
         return splittedQueue.dequeue();
     }
 
