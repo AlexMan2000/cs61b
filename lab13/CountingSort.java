@@ -1,3 +1,8 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+
 /**
  * Class with 2 ways of doing Counting sort, one naive way and one "better" way
  *
@@ -20,6 +25,7 @@ public class CountingSort {
             max = max > i ? max : i;
         }
 
+        System.out.println(max);
         // gather all the counts for each value
         int[] counts = new int[max + 1];
         for (int i : arr) {
@@ -67,6 +73,55 @@ public class CountingSort {
      */
     public static int[] betterCountingSort(int[] arr) {
         // TODO make counting sort work with arrays containing negative numbers.
-        return null;
+        ArrayList<Integer> negatives = new ArrayList<>();
+        ArrayList<Integer> nonnegatives = new ArrayList<>();
+
+        for (int i: arr) {
+            if (i < 0) {
+                negatives.add(i);
+            } else {
+                nonnegatives.add(i);
+            }
+        }
+        int[] nonnegativesArray = new int[nonnegatives.size()];
+
+        for(int i = 0; i< nonnegatives.size(); i++) {
+            nonnegativesArray[i] = nonnegatives.get(i);
+        }
+        // Call counting sort for positive/negative numbers
+        int[] sortedPositive = naiveCountingSort(nonnegativesArray);
+
+
+        int[] sortedNegativeInverted = null;
+        if (negatives.size() != 0) {
+            int[] negativesArray = new int[negatives.size()];
+            // Invert the negative numbers
+            for(int i = 0; i< negatives.size(); i++) {
+                negativesArray[i] = - negatives.get(i);
+            }
+            int[] sortedNegative = naiveCountingSort(negativesArray);
+            sortedNegativeInverted = new int[sortedNegative.length];
+            // Invert the negative numbers back
+            for(int i = 0; i< sortedNegative.length; i++) {
+                sortedNegativeInverted[i] = - sortedNegative[sortedNegative.length - 1 - i];
+            }
+        } else {
+            sortedNegativeInverted = new int[0];
+        }
+
+        // Concatenate
+        int[] sorted = new int[sortedPositive.length + sortedNegativeInverted.length];
+        int k = 0;
+        for (int i = 0; i < sortedNegativeInverted.length; i++, k++) {
+            sorted[k] = sortedNegativeInverted[i];
+        }
+
+        for (int i = 0; i < sortedPositive.length; i++, k++) {
+            sorted[k] = sortedPositive[i];
+        }
+
+
+
+        return sorted;
     }
 }
