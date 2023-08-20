@@ -151,12 +151,10 @@ public class RadixSort {
         // Create a positionMap in [start, end)
         int[] positionMap = new int[RADIX];
 
-        for (int i = 0; i < freqMap.length; i++) {
-            int newPos = start;
-            for (int j = 0; j < i; j++) {
-               newPos += freqMap[j];
-            }
+        int newPos = start;
+        for (int i = 0; i < positionMap.length; i++) {
             positionMap[i] = newPos;
+            newPos += freqMap[i];
         }
 
         int[] positionMapCopy = Arrays.copyOfRange(positionMap, 0, positionMap.length);
