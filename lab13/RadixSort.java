@@ -1,7 +1,4 @@
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Class for doing Radix sort
  *
@@ -25,9 +22,9 @@ public class RadixSort {
      * @return String[] the sorted array
      */
     public static String[] sort(String[] asciis) {
-        // TODO: Implement LSD Sort
-//        LSDSort(asciis);
-        MSDSort(asciis);
+        // Implement LSD Sort
+        LSDSort(asciis);
+//        MSDSort(asciis);
         return asciis;
     }
 
@@ -36,7 +33,7 @@ public class RadixSort {
         // Padding
         int maxLength = Integer.MIN_VALUE;
         for (String s: asciis) {
-            maxLength = maxLength > s.length() ? maxLength: s.length();
+            maxLength = maxLength > s.length() ? maxLength : s.length();
         }
 
         // Right append 0 to the string
@@ -106,7 +103,7 @@ public class RadixSort {
         // Padding
         int maxLength = Integer.MIN_VALUE;
         for (String s: asciis) {
-            maxLength = maxLength > s.length() ? maxLength: s.length();
+            maxLength = maxLength > s.length() ? maxLength : s.length();
         }
 
         MAX_LENGTH = maxLength;
