@@ -20,12 +20,6 @@ public class MemoryGame {
     private int randomIndex;
 
     public static void main(String[] args) {
-//        if (args.length < 1) {
-//            System.out.println("Please enter a seed");
-//            return;
-//        }
-
-//        int seed = Integer.parseInt(args[0]);
         int seed = 42;
         MemoryGame game = new MemoryGame(40, 40, seed);  // Modify the parameter list
         game.startGame();
@@ -62,21 +56,17 @@ public class MemoryGame {
 
     public void drawFrame(String s) {
         //TODO: Take the string and display it in the center of the screen
-//        StdDraw.setPenColor(Color.WHITE);
+        StdDraw.clear(); // Clear previous info from the screen
         StdDraw.line(0, this.height - 5 , this.width, this.height - 5);
         StdDraw.text(5, this.height - 2.5, "Round: " + round);
 
         // Depending on "type" or "Watch", display different items
-        if (!playerTurn) {
-            System.out.println("Watch Turn!");
-            StdDraw.text(this.width / 2, this.height - 2.5, "Watch!");
-            StdDraw.text(this.width / 2, this.height / 2, s);
-        } else {
-            System.out.println("Type Turn!");
-            StdDraw.text(this.width / 2, this.height - 2.5, "Type!");
-        }
+        StdDraw.text(this.width / 2, this.height - 2.5,  playerTurn ? "Type":"Watch!");
+        StdDraw.text(this.width / 2, this.height / 2, s);
+
         //TODO: If game is not over, display relevant game information at the top of the screen
         StdDraw.text(this.width - 7.5, this.height - 2.5, ENCOURAGEMENT[randomIndex]);
+        StdDraw.show(); // Flush onto the screen
     }
 
     public void flashSequence(String letters) {
@@ -84,13 +74,9 @@ public class MemoryGame {
         StdDraw.pause(500);
         for (int i = 0; i < letters.length(); i++) {
             char l = letters.charAt(i);
-            StdDraw.clear();
             drawFrame(String.valueOf(l));
-            StdDraw.show();   // Flush it on to the screen
             StdDraw.pause(500);
-            StdDraw.clear();
             drawFrame("");
-            StdDraw.show();
             StdDraw.pause(500);
         }
     }
@@ -103,19 +89,16 @@ public class MemoryGame {
     public String solicitNCharsInput(int n) {
         //TODO: Read n letters of player input
         StringBuilder sb = new StringBuilder();
-        StdDraw.clear();
         drawFrame("");
         int counter = n;
         while (true) {
             if (!StdDraw.hasNextKeyTyped()) {
             } else {
-                if (counter > 0) {
-                    char key = StdDraw.nextKeyTyped();
-                    sb.append(key);
-                    drawFrame(sb.toString());
-                    StdDraw.show();
-                    counter--;
-                } else {
+                char key = StdDraw.nextKeyTyped();
+                sb.append(key);
+                drawFrame(sb.toString());
+                counter--;
+                if (counter == 0) {
                     break;
                 }
             }
@@ -128,7 +111,6 @@ public class MemoryGame {
     }
 
     private String watchPhase() {
-        StdDraw.clear();
         randomIndex = this.rand.nextInt(ENCOURAGEMENT.length);
         String randString = generateRandomString(round);
         flashSequence(randString);
@@ -137,22 +119,19 @@ public class MemoryGame {
 
     private void typePhase(String randString) {
         randomIndex = this.rand.nextInt(ENCOURAGEMENT.length);
-        StdDraw.clear();
         drawFrame("");
-        StdDraw.show();
         String inputString = solicitNCharsInput(randString.length());
-        System.out.println(inputString);
+        StdDraw.pause(500);
         if (!inputString.equals(randString)) {
-            StdDraw.clear();
-            StdDraw.text(this.width / 2, this.height / 2,
-                    "Game Over! You made it to round: " + round);
-            StdDraw.show();
+            drawFrame("Game Over! You made it to round: " + round);
             gameOver = true;
+        } else {
+            drawFrame("Correct, well done!");
+            StdDraw.pause(1500);
         }
     }
 
     public void startGame() {
-        //TODO: Set any relevant variables before the game starts
         round = 1;
         gameOver = false;
         playerTurn = false;
@@ -168,5 +147,4 @@ public class MemoryGame {
             round++;
         }
     }
-
 }

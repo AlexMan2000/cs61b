@@ -98,7 +98,6 @@ public class RadixSort {
     }
 
 
-
     private static void MSDSort(String[] asciis) {
         // Padding
         int maxLength = Integer.MIN_VALUE;
